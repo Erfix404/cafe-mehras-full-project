@@ -4,8 +4,6 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const mongoose = require("mongoose");
-
-// ۱. مسیر جدید محصولات رو اینجا وارد می‌کنیم
 const productRoutes = require("./src/routes/productRoutes");
 
 dotenv.config();
@@ -21,6 +19,7 @@ mongoose
 
 // --- Middlewares ---
 app.use(cors());
+// این خط کد بسیار مهم است و به سرور اجازه می‌دهد JSON را بفهمد
 app.use(express.json());
 
 // --- Test Route ---
@@ -28,7 +27,7 @@ app.get("/", (req, res) => {
   res.send("Cafe Mehras Backend is running successfully! ☕");
 });
 
-// ۲. به سرور می‌گوییم که برای آدرس /api/products از این فایل مسیرها استفاده کند
+// --- API Routes ---
 app.use("/api/products", productRoutes);
 
 // --- Server Startup ---
