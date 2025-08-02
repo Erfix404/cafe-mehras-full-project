@@ -1,0 +1,10 @@
+/* src/index.css */
+
+/*
+  These are Tailwind "directives". They tell Tailwind to inject its
+  pre-designed styles into your final CSS file.
+*/
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
