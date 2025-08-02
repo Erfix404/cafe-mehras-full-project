@@ -1,24 +1,37 @@
-// 1. فراخوانی پکیج‌های نصب شده
+// backend/server.js
+
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const mongoose = require("mongoose");
 
-// 2. اجرای تنظیمات اولیه
-dotenv.config(); // این دستور باعث میشه متغیرهای فایل .env قابل استفاده بشن
+// ۱. مسیر جدید محصولات رو اینجا وارد می‌کنیم
+const productRoutes = require("./src/routes/productRoutes");
 
-const app = express(); // یک نمونه از اپلیکیشن اکسپرس میسازیم
-const PORT = process.env.PORT || 5001; // پورت سرور رو از فایل .env میخونیم
+dotenv.config();
 
-// 3. استفاده از Middleware ها
-app.use(cors()); // به سرور اجازه میده از دامنه‌های دیگه درخواست دریافت کنه
-app.use(express.json()); // به سرور اجازه میده درخواست‌های با فرمت JSON رو بفهمه
+const app = express();
+const PORT = process.env.PORT || 5001;
 
-// 4. یک روت (مسیر) تست برای اطمینان از کارکرد سرور
+// --- Database Connection ---
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => console.log("✅ Successfully connected to MongoDB"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
+
+// --- Middlewares ---
+app.use(cors());
+app.use(express.json());
+
+// --- Test Route ---
 app.get("/", (req, res) => {
-  res.send("Welcome to Cafe Mehras Backend! ☕");
+  res.send("Cafe Mehras Backend is running successfully! ☕");
 });
 
-// 5. راه‌اندازی سرور
+// ۲. به سرور می‌گوییم که برای آدرس /api/products از این فایل مسیرها استفاده کند
+app.use("/api/products", productRoutes);
+
+// --- Server Startup ---
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`🚀 Server is running on port ${PORT}`);
 });
