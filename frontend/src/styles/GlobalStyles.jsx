@@ -3,33 +3,28 @@ import React from "react";
 
 const GlobalStyles = () => (
   <style>{`
-        /* Importing Google Fonts */
-        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
-
         /* Basic HTML and Body styles */
         html {
             scroll-behavior: smooth;
-            /* === NEW: Firefox Scrollbar Styles === */
             scrollbar-width: thin;
-            scrollbar-color: #eab308 #f1f5f9; /* thumb track */
+            scrollbar-color: #C97B2D #EFE7DD;
         }
-        
+
         body {
             font-family: 'Vazirmatn', sans-serif;
             direction: rtl;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            background-color: #FFFBF5; /* Light mode background */
-            color: #44403c; /* Light mode text */
+            background-color: #FAF7F2;
+            color: #1C1917;
             transition: background-color 0.5s, color 0.5s;
         }
         body.dark {
-            background-color: #1A120B; /* Dark mode background */
-            color: #d6d3d1; /* Dark mode text */
+            background-color: #12100E;
+            color: #F5EFE7;
         }
         .dark html {
-             scrollbar-color: #eab308 #27272a;
+             scrollbar-color: #E8A44D #2E2924;
         }
 
         /* Custom scrollbar utility */
@@ -37,44 +32,47 @@ const GlobalStyles = () => (
             display: none;
         }
         .no-scrollbar {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
-        
+
         /* Global Keyframe Animations */
         @keyframes shimmer {
             0% { background-position: -1000px 0; }
             100% { background-position: 1000px 0; }
         }
-        
-        /* === NEW: High-Level Custom Scrollbar Styles === */
-        /* This works in Webkit-based browsers like Chrome, Safari, and Edge */
-        
-        ::-webkit-scrollbar {
-            width: 14px;
-        }
 
+        /* Webkit scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
         ::-webkit-scrollbar-track {
-            background: rgba(241, 245, 249, 0.5); /* Semi-transparent track */
+            background: rgba(239, 231, 221, 0.5);
         }
         .dark ::-webkit-scrollbar-track {
-            background: rgba(39, 39, 42, 0.5);
+            background: rgba(46, 41, 36, 0.5);
         }
-
         ::-webkit-scrollbar-thumb {
-            background-image: linear-gradient(to bottom, #fde047, #f59e0b);
+            background-image: linear-gradient(to bottom, #E8A44D, #C97B2D);
             border-radius: 10px;
             border: 3px solid transparent;
             background-clip: content-box;
-            transition: all 0.2s ease-in-out;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
-            background-image: linear-gradient(to bottom, #fef08a, #fbbf24);
+        /* Focus visible — accessibility */
+        :focus-visible {
+            outline: 2px solid #C97B2D;
+            outline-offset: 2px;
         }
-        
-        ::-webkit-scrollbar-thumb:active {
-            transform: scale(0.95);
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
         }
     `}</style>
 );

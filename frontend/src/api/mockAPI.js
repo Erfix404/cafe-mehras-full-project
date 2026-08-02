@@ -1,498 +1,484 @@
 // src/api/mockAPI.js
 
 const menuData = [
-  // --- اسپرسوبار ---
-  {
+{
     id: 1,
     name: "اسپرسو (۷۰ ربوستا)",
     price: 65,
     category: "اسپرسوبار",
-    image: "https://placehold.co/600x400/8d6e63/ffffff?text=Espresso",
+    image: "/images/espresso.jpg",
     description:
       "یک شات اسپرسوی غلیظ و پرکافئین با کرمای غنی و طعمی قدرتمند، ایده‌آل برای شروع یک روز پرانرژی.",
   },
-  {
+{
     id: 2,
     name: "اسپرسو ۵۰×۵۰",
     price: 75,
     category: "اسپرسوبار",
-    image: "https://placehold.co/600x400/8d6e63/ffffff?text=Espresso",
+    image: "/images/espresso.jpg",
     description:
       "ترکیبی متعادل از دانه‌های عربیکا و ربوستا که طعمی کلاسیک و عطری دلنشین را به ارمغان می‌آورد.",
   },
-  {
+{
     id: 3,
     name: "اسپرسو ۷۰ عربیکا",
     price: 80,
     category: "اسپرسوبار",
-    image: "https://placehold.co/600x400/8d6e63/ffffff?text=Espresso",
+    image: "/images/espresso.jpg",
     description:
       "اسیدیته ملایم و طعم‌های میوه‌ای و گلی دانه‌های عربیکا در یک شات اسپرسوی لطیف و معطر.",
   },
-  {
+{
     id: 4,
     name: "اسپرسو بلند عربیکا",
     price: 80,
     category: "اسپرسوبار",
-    image: "https://placehold.co/600x400/8d6e63/ffffff?text=Espresso",
+    image: "/images/espresso.jpg",
     description: "",
   },
-  {
+{
     id: 5,
     name: "کلمبیا",
     price: 90,
     category: "اسپرسوبار",
-    image: "https://placehold.co/600x400/8d6e63/ffffff?text=Colombia",
+    image: "/images/espresso.jpg",
     description:
       "قهوه‌ای تک‌خاستگاه با طعم‌یادهای آجیلی و شکلاتی و تن‌واری (Body) متوسط، تجربه‌ای کلاسیک و دلپذیر.",
   },
-  {
+{
     id: 6,
     name: "اتیوپی",
     price: 90,
     category: "اسپرسوبار",
-    image: "https://placehold.co/600x400/8d6e63/ffffff?text=Ethiopia",
+    image: "/images/espresso.jpg",
     description: "",
   },
-  {
+{
     id: 7,
     name: "ریسترتو",
     price: 65,
     category: "اسپرسوبار",
-    image: "https://placehold.co/600x400/8d6e63/ffffff?text=Ristretto",
+    image: "/images/espresso.jpg",
     description:
       "عصاره‌ای کوتاه‌تر و غلیظ‌تر از اسپرسو با شیرینی بیشتر و تلخی کمتر، نهایت طعم قهوه در یک جرعه.",
   },
-  {
+{
     id: 8,
     name: "لانگو",
     price: 65,
     category: "اسپرسوبار",
-    image: "https://placehold.co/600x400/8d6e63/ffffff?text=Lungo",
+    image: "/images/espresso.jpg",
     description: "",
   },
-  {
+{
     id: 9,
     name: "قهوه دمی چکه‌ای",
     price: 150,
     category: "اسپرسوبار",
-    image: "https://placehold.co/600x400/a1887f/ffffff?text=Drip+Coffee",
+    image: "/images/espresso.jpg",
     description:
       "قهوه‌ای صاف و شفاف با طعم‌های پیچیده که به آرامی دم‌آوری شده تا بهترین ویژگی‌های دانه قهوه را آزاد کند.",
   },
-  {
+{
     id: 10,
     name: "قهوه دمی غوطه‌وری",
     price: 150,
     category: "اسپرسوبار",
-    image: "https://placehold.co/600x400/a1887f/ffffff?text=Immersion",
+    image: "/images/espresso.jpg",
     description: "",
   },
-  // === NEW SPECIALTY ITEM ADDED ===
-  {
-    id: 58,
+{
+    id: 11,
     name: "اسپشیالتی",
     price: null,
     category: "اسپرسوبار",
-    image: "https://placehold.co/600x400/d4af37/ffffff?text=Specialty",
+    image: "/images/espresso.jpg",
     description:
       "قهوه‌های تک‌خاستگاه و کمیاب از سراسر جهان که به صورت روزانه تغییر می‌کنند. لطفاً برای اطلاع از دانه‌های امروز و قیمت از باریستا سوال بفرمایید.",
   },
-
-  // --- هات درینک ---
-  {
-    id: 11,
+{
+    id: 12,
     name: "کاپوچینو",
     price: 100,
     category: "هات درینک",
-    image: "https://placehold.co/600x400/bcaaa4/ffffff?text=Cappuccino",
+    image: "/images/latte-art.jpg",
     description: "",
   },
-  {
-    id: 12,
+{
+    id: 13,
     name: "کاپوچینو کلاسیک",
     price: 90,
     category: "هات درینک",
-    image: "https://placehold.co/600x400/bcaaa4/ffffff?text=Cappuccino",
+    image: "/images/latte-art.jpg",
     description:
       "ترکیب سنتی اسپرسو، شیر بخار داده شده و فوم شیر غلیظ، یک انتخاب کلاسیک و همیشگی.",
   },
-  {
-    id: 13,
+{
+    id: 14,
     name: "لته",
     price: 90,
     category: "هات درینک",
-    image: "https://placehold.co/600x400/d7ccc8/4e342e?text=Latte",
+    image: "/images/latte-art.jpg",
     description:
       "اسپرسوی غنی به همراه مقدار زیادی شیر بخار داده شده و لایه‌ای نازک از فوم، نوشیدنی‌ای لطیف و خامه‌ای.",
   },
-  {
-    id: 14,
+{
+    id: 15,
     name: "لته لوکس",
     price: 120,
     category: "هات درینک",
-    image: "https://placehold.co/600x400/d7ccc8/4e342e?text=Latte",
+    image: "/images/latte-art.jpg",
     description: "",
   },
-  {
-    id: 15,
+{
+    id: 16,
     name: "هات چاکلت",
     price: 110,
     category: "هات درینک",
-    image: "https://placehold.co/600x400/5d4037/ffffff?text=Hot+Chocolate",
+    image: "/images/latte-art.jpg",
     description:
       "شکلات تلخ بلژیکی ذوب شده در شیر داغ، نوشیدنی‌ای غلیظ، غنی و آرامش‌بخش برای تمام فصول.",
   },
-  {
-    id: 16,
+{
+    id: 17,
     name: "وایت چاکلت",
     price: 90,
     category: "هات درینک",
-    image: "https://placehold.co/600x400/efebe9/5d4037?text=White+Chocolate",
+    image: "/images/latte-art.jpg",
     description: "",
   },
-  {
-    id: 17,
+{
+    id: 18,
     name: "پرو چاکلت لایس",
     price: 170,
     category: "هات درینک",
-    image: "https://placehold.co/600x400/4e342e/ffffff?text=Pro+Chocolate",
+    image: "/images/latte-art.jpg",
     description: "",
   },
-  {
-    id: 18,
+{
+    id: 19,
     name: "موکاچینو",
     price: 105,
     category: "هات درینک",
-    image: "https://placehold.co/600x400/6d4c41/ffffff?text=Mochaccino",
+    image: "/images/latte-art.jpg",
     description: "",
   },
-  {
-    id: 19,
+{
+    id: 20,
     name: "موکا",
     price: 110,
     category: "هات درینک",
-    image: "https://placehold.co/600x400/6d4c41/ffffff?text=Mocha",
+    image: "/images/latte-art.jpg",
     description:
       "ترکیبی بهشتی از اسپرسو، شکلات داغ و شیر بخار داده شده، بهترین انتخاب برای دوست‌داران قهوه و شکلات.",
   },
-  {
-    id: 20,
+{
+    id: 21,
     name: "کارامل ماکیاتو",
     price: 100,
     category: "هات درینک",
-    image: "https://placehold.co/600x400/c5a582/ffffff?text=Macchiato",
+    image: "/images/latte-art.jpg",
     description: "",
   },
-  {
-    id: 21,
+{
+    id: 22,
     name: "کورتادو",
     price: 70,
     category: "هات درینک",
-    image: "https://placehold.co/600x400/a1887f/ffffff?text=Cortado",
+    image: "/images/latte-art.jpg",
     description: "",
   },
-  {
-    id: 22,
+{
+    id: 23,
     name: "گلدن اسپرسو",
     price: 125,
     category: "هات درینک",
-    image: "https://placehold.co/600x400/ffb300/4e342e?text=Golden+Espresso",
+    image: "/images/latte-art.jpg",
     description: "",
   },
-  {
-    id: 23,
+{
+    id: 24,
     name: "نسکافه",
     price: 85,
     category: "هات درینک",
-    image: "https://placehold.co/600x400/bcaaa4/4e342e?text=Nescafe",
+    image: "/images/latte-art.jpg",
     description: "",
   },
-  {
-    id: 24,
+{
+    id: 25,
     name: "ماسالا",
     price: 75,
     category: "هات درینک",
-    image: "https://placehold.co/600x400/c0a58e/4e342e?text=Masala",
+    image: "/images/latte-art.jpg",
     description:
       "چای شیرین و تند هندی با ترکیبی از ادویه‌های گرم مانند زنجبیل، هل و دارچین، نوشیدنی‌ای معطر و انرژی‌بخش.",
   },
-  {
-    id: 25,
+{
+    id: 26,
     name: "کرک",
     price: 90,
     category: "هات درینک",
     description:
       "ترکیبی خاص و معطر از چای، هل، زعفران و شکلات که طعمی فراموش‌نشدنی را خلق می‌کند.",
-    image: "https://placehold.co/600x400/ffc107/4e342e?text=Karak",
+    image: "/images/latte-art.jpg",
   },
-  {
-    id: 26,
+{
+    id: 27,
     name: "شیرداغ",
     price: 30,
     category: "هات درینک",
-    image: "https://placehold.co/600x400/f5f5f5/4e342e?text=Hot+Milk",
+    image: "/images/latte-art.jpg",
     description: "",
   },
-
-  // --- آیس ---
-  {
-    id: 27,
+{
+    id: 28,
     name: "آیس امریکانو",
     price: 95,
     category: "آیس",
-    image: "https://placehold.co/600x400/a1887f/ffffff?text=Iced+Americano",
+    image: "/images/iced-coffee.jpg",
     description: "",
   },
-  {
-    id: 28,
+{
+    id: 29,
     name: "آیس چاکلت",
     price: 130,
     category: "آیس",
-    image: "https://placehold.co/600x400/5d4037/ffffff?text=Iced+Chocolate",
+    image: "/images/iced-coffee.jpg",
     description: "",
   },
-  {
-    id: 29,
+{
+    id: 30,
     name: "آیس موکا",
     price: 150,
     category: "آیس",
-    image: "https://placehold.co/600x400/6d4c41/ffffff?text=Iced+Mocha",
+    image: "/images/iced-coffee.jpg",
     description: "",
   },
-  {
-    id: 30,
+{
+    id: 31,
     name: "آیس موکاچینو",
     price: 170,
     category: "آیس",
-    image: "https://placehold.co/600x400/6d4c41/ffffff?text=Iced+Mochaccino",
+    image: "/images/iced-coffee.jpg",
     description: "",
   },
-  {
-    id: 31,
+{
+    id: 32,
     name: "آیس کارامل ماکیاتو",
     price: 160,
     category: "آیس",
-    image: "https://placehold.co/600x400/c5a582/ffffff?text=Iced+Macchiato",
+    image: "/images/iced-coffee.jpg",
     description: "",
   },
-  {
-    id: 32,
+{
+    id: 33,
     name: "آیس لته",
     price: 110,
     category: "آیس",
-    image: "https://placehold.co/600x400/d7ccc8/4e342e?text=Iced+Latte",
+    image: "/images/iced-coffee.jpg",
     description: "",
   },
-  {
-    id: 33,
+{
+    id: 34,
     name: "آیس لته سیروپ",
     price: 150,
     category: "آیس",
-    image: "https://placehold.co/600x400/d7ccc8/4e342e?text=Iced+Latte",
+    image: "/images/iced-coffee.jpg",
     description: "",
   },
-  {
-    id: 34,
+{
+    id: 35,
     name: "آیس کرک",
     price: 100,
     category: "آیس",
-    image: "https://placehold.co/600x400/ffc107/4e342e?text=Iced+Karak",
+    image: "/images/iced-coffee.jpg",
     description: "",
   },
-  {
-    id: 35,
+{
+    id: 36,
     name: "آیس نسکافه",
     price: 110,
     category: "آیس",
-    image: "https://placehold.co/600x400/bcaaa4/4e342e?text=Iced+Nescafe",
+    image: "/images/iced-coffee.jpg",
     description: "",
   },
-
-  // --- ویواید دریم ---
-  {
-    id: 36,
+{
+    id: 37,
     name: "کارامل دریم",
     price: 75,
     category: "ویواید دریم",
-    image: "https://placehold.co/600x400/e6b88f/8c5a2b?text=Caramel",
+    image: "/images/pour-over.jpg",
     description: "",
   },
-  {
-    id: 37,
+{
+    id: 38,
     name: "کوکونات دریم",
     price: 75,
     category: "ویواید دریم",
-    image: "https://placehold.co/600x400/f5f5f5/795548?text=Coconut",
+    image: "/images/pour-over.jpg",
     description: "",
   },
-  {
-    id: 38,
+{
+    id: 39,
     name: "وانیلا دریم",
     price: 75,
     category: "ویواید دریم",
-    image: "https://placehold.co/600x400/fff8e1/c6a76d?text=Vanilla",
+    image: "/images/pour-over.jpg",
     description: "",
   },
-  {
-    id: 39,
+{
+    id: 40,
     name: "سینامون دریم",
     price: 75,
     category: "ویواید دریم",
-    image: "https://placehold.co/600x400/e6b88f/ffffff?text=Cinnamon",
+    image: "/images/pour-over.jpg",
     description: "",
   },
-  {
-    id: 40,
+{
+    id: 41,
     name: "چاکلت دریم",
     price: 75,
     category: "ویواید دریم",
-    image: "https://placehold.co/600x400/e6b88f/ffffff?text=Chocolate",
+    image: "/images/pour-over.jpg",
     description: "",
   },
-  {
-    id: 41,
+{
+    id: 42,
     name: "هزل دریم",
     price: 75,
     category: "ویواید دریم",
-    image: "https://placehold.co/600x400/e6b88f/ffffff?text=Hazelnut",
+    image: "/images/pour-over.jpg",
     description: "",
   },
-  {
-    id: 42,
+{
+    id: 43,
     name: "آیریش دریم",
     price: 75,
     category: "ویواید دریم",
-    image: "https://placehold.co/600x400/e6b88f/ffffff?text=Irish",
+    image: "/images/pour-over.jpg",
     description: "",
   },
-
-  // --- دمی بار ---
-  {
-    id: 43,
+{
+    id: 44,
     name: "چای ایرانی",
     price: 45,
     category: "دمی بار",
-    image: "https://placehold.co/600x400/c8e6c9/388e3c?text=Tea",
+    image: "/images/pour-over.jpg",
     description: "",
   },
-  {
-    id: 44,
+{
+    id: 45,
     name: "چای ترش",
     price: 60,
     category: "دمی بار",
-    image: "https://placehold.co/600x400/f8bbd0/c2185b?text=Hibiscus",
+    image: "/images/pour-over.jpg",
     description: "",
   },
-  {
-    id: 45,
+{
+    id: 46,
     name: "چای سبز",
     price: 50,
     category: "دمی بار",
-    image: "https://placehold.co/600x400/a5d6a7/388e3c?text=Green+Tea",
+    image: "/images/pour-over.jpg",
     description: "",
   },
-  {
-    id: 46,
+{
+    id: 47,
     name: "معجون چایی",
     price: 70,
     category: "دمی بار",
-    image: "https://placehold.co/600x400/ffccbc/e64a19?text=Herbal+Mix",
+    image: "/images/pour-over.jpg",
     description: "",
   },
-  {
-    id: 47,
+{
+    id: 48,
     name: "دمنوش بهشت",
     price: 65,
     category: "دمی بار",
-    image: "https://placehold.co/600x400/ffccbc/e64a19?text=Herbal+Mix",
+    image: "/images/pour-over.jpg",
     description: "",
   },
-  {
-    id: 48,
+{
+    id: 49,
     name: "دمنوش انرژی",
     price: 60,
     category: "دمی بار",
-    image: "https://placehold.co/600x400/ffccbc/e64a19?text=Herbal+Mix",
+    image: "/images/pour-over.jpg",
     description: "",
   },
-  {
-    id: 49,
+{
+    id: 50,
     name: "دمنوش آروما",
     price: 65,
     category: "دمی بار",
-    image: "https://placehold.co/600x400/ffccbc/e64a19?text=Herbal+Mix",
+    image: "/images/pour-over.jpg",
     description: "",
   },
-
-  // --- سیروپ ---
-  {
-    id: 50,
+{
+    id: 51,
     name: "کارامل",
     price: 40,
     category: "سیروپ",
-    image: "https://placehold.co/600x400/ffd54f/c26a18?text=Syrup",
+    image: "/images/latte-art.jpg",
     description: "",
   },
-  {
-    id: 51,
+{
+    id: 52,
     name: "نارگیل",
     price: 40,
     category: "سیروپ",
-    image: "https://placehold.co/600x400/ffd54f/c26a18?text=Syrup",
+    image: "/images/latte-art.jpg",
     description: "",
   },
-  {
-    id: 52,
+{
+    id: 53,
     name: "وانیل",
     price: 40,
     category: "سیروپ",
-    image: "https://placehold.co/600x400/ffd54f/c26a18?text=Syrup",
+    image: "/images/latte-art.jpg",
     description: "",
   },
-  {
-    id: 53,
+{
+    id: 54,
     name: "دارچین",
     price: 40,
     category: "سیروپ",
-    image: "https://placehold.co/600x400/ffd54f/c26a18?text=Syrup",
+    image: "/images/latte-art.jpg",
     description: "",
   },
-  {
-    id: 54,
+{
+    id: 55,
     name: "شکلات",
     price: 40,
     category: "سیروپ",
-    image: "https://placehold.co/600x400/ffd54f/c26a18?text=Syrup",
+    image: "/images/latte-art.jpg",
     description: "",
   },
-  {
-    id: 55,
+{
+    id: 56,
     name: "فندق",
     price: 40,
     category: "سیروپ",
-    image: "https://placehold.co/600x400/ffd54f/c26a18?text=Syrup",
+    image: "/images/latte-art.jpg",
     description: "",
   },
-  {
-    id: 56,
+{
+    id: 57,
     name: "آیریش",
     price: 40,
     category: "سیروپ",
-    image: "https://placehold.co/600x400/ffd54f/c26a18?text=Syrup",
+    image: "/images/latte-art.jpg",
     description: "",
   },
-
-  // --- کیک و دسر ---
-  {
-    id: 57,
+{
+    id: 58,
     name: "کیک روز",
     price: 110,
     category: "کیک و دسر",
-    image: "https://placehold.co/600x400/f48fb1/880e4f?text=Cake",
+    image: "/images/dessert.jpg",
     description:
       "کیک تازه و خانگی امروز را از ما بپرسید! هر روز یک طعم جدید و هیجان‌انگیز، تهیه شده با بهترین مواد اولیه.",
-  },
+  }
 ];
 
 const contactInfo = {

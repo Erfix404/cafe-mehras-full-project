@@ -1,7 +1,7 @@
 // src/components/menu/MenuCard.jsx
 import React, { useRef, useState, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Check, Sparkles } from "lucide-react"; // Import Sparkles icon
+import { Plus, Check, Sparkles } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 import { useToast } from "../../context/ToastContext";
 import AnimatedPrice from "../common/AnimatedPrice";
@@ -37,35 +37,36 @@ const MenuCard = memo(({ item, onSelect }) => {
       onHoverEnd={() => setIsHovered(false)}
       onClick={() => onSelect(item)}
     >
-      <div className="relative h-full bg-white/60 dark:bg-black/30 rounded-3xl backdrop-blur-2xl border border-white/20 dark:border-white/10 shadow-2xl shadow-black/10 overflow-hidden">
-        {/* === NEW: Pulsating Specialty Icon with adaptive colors === */}
+      <div className="relative h-full bg-bone dark:bg-night-soft rounded-3xl border border-bone-line/40 dark:border-night-line shadow-warm hover:shadow-warm-lg transition-shadow overflow-hidden">
+        {/* === Specialty badge === */}
         {item.price === null && (
           <motion.div
-            className="absolute top-4 right-4 z-20 p-2 bg-white/50 dark:bg-stone-900/50 backdrop-blur-sm rounded-full border border-white/20 dark:border-stone-700/50"
-            animate={{ scale: [1, 1.1, 1] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-4 right-4 z-20 p-2.5 bg-bone/90 dark:bg-night-soft/90 backdrop-blur-sm rounded-full border border-bone-line/60 dark:border-night-line shadow-warm"
+            animate={{ scale: [1, 1.08, 1] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
           >
-            <Sparkles className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+            <Sparkles className="w-5 h-5 text-saffron" />
           </motion.div>
         )}
 
         <div className="relative z-10 flex flex-col h-full">
+          {/* Persian arch media */}
           <div className="overflow-hidden rounded-t-3xl">
             <motion.img
               ref={imageRef}
               layoutId={`card-image-${item.id}`}
               src={item.image}
               alt={item.name}
-              className="w-full h-56 object-cover"
+              className="w-full h-52 object-cover"
               loading="lazy"
-              animate={{ scale: isHovered ? 1.05 : 1 }}
-              transition={{ type: "spring", stiffness: 300, damping: 15 }}
+              animate={{ scale: isHovered ? 1.06 : 1 }}
+              transition={{ type: "spring", stiffness: 300, damping: 18 }}
             />
           </div>
-          <div className="p-4 sm:p-6 flex flex-col flex-grow">
+          <div className="p-4 sm:p-5 flex flex-col flex-grow">
             <motion.h3
               layoutId={`card-title-${item.id}`}
-              className="text-lg sm:text-xl font-bold text-stone-800 dark:text-stone-100"
+              className="text-lg sm:text-xl font-extrabold text-ink dark:text-bone"
             >
               {item.name}
             </motion.h3>
@@ -73,17 +74,20 @@ const MenuCard = memo(({ item, onSelect }) => {
 
             {item.price !== null ? (
               <div className="flex justify-between items-center mt-4">
-                <p className="text-lg sm:text-xl font-semibold text-amber-700 dark:text-yellow-400">
+                <p className="text-lg sm:text-xl font-black text-saffron-deep dark:text-saffron-glow">
                   <AnimatedPrice value={item.price} />
-                  <span className="text-sm sm:text-base mr-1">هزار تومان</span>
+                  <span className="text-sm font-medium mr-1 text-espresso/60 dark:text-muted">
+                    هزار تومان
+                  </span>
                 </p>
                 <motion.button
                   onClick={handleAddToCart}
                   whileTap={{ scale: 0.9 }}
-                  className={`rounded-full p-3 shadow-lg transition-colors duration-300 ${
+                  aria-label={`افزودن ${item.name} به سبد`}
+                  className={`rounded-full p-3 shadow-warm transition-colors duration-300 ${
                     added
-                      ? "bg-green-500 cursor-default"
-                      : "bg-amber-500/80 dark:bg-yellow-500/80 hover:bg-amber-600 dark:hover:bg-yellow-400"
+                      ? "bg-green-600 cursor-default"
+                      : "bg-saffron hover:bg-saffron-deep text-bone"
                   }`}
                 >
                   <AnimatePresence mode="wait">
@@ -97,17 +101,13 @@ const MenuCard = memo(({ item, onSelect }) => {
                       {added ? (
                         <Check size={22} className="text-white" />
                       ) : (
-                        <Plus
-                          size={22}
-                          className="text-white dark:text-black"
-                        />
+                        <Plus size={22} />
                       )}
                     </motion.div>
                   </AnimatePresence>
                 </motion.button>
               </div>
             ) : (
-              // Render an empty space to maintain layout consistency
               <div className="h-[52px] mt-4"></div>
             )}
           </div>

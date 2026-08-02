@@ -1,31 +1,37 @@
 // src/components/common/AnimatedPrice.jsx
-import React, { useRef, useEffect } from "react";
-import { useInView, animate } from "framer-motion";
+import React, { useRef, useEffect, useState } from "react";
 
 const AnimatedPrice = ({ value }) => {
   const ref = useRef(null);
-  // === CHANGE: Adjusted useInView options for better mobile performance ===
-  // 'amount: 0.2' means the animation will trigger when 20% of the element is visible.
-  // This is more reliable than a pixel-based margin on different screen sizes.
-  const isInView = useInView(ref, { once: true, amount: 0.2 });
+  const [display, setDisplay] = useState(0);
+  const [started, setStarted] = useState(false);
 
   useEffect(() => {
-    if (isInView && ref.current) {
-      const node = ref.current;
-      const controls = animate(0, value, {
-        duration: 1.2,
-        ease: "easeOut",
-        onUpdate: (latest) => {
-          if (node) {
-            node.textContent = Math.round(latest).toLocaleString("fa-IR");
-          }
-        },
-      });
-      return () => controls.stop();
+    if (!started) {
+      setStarted(true);
+      return;
     }
-  }, [isInView, value]);
+    const node = ref.current;
+    if (!node) return;
+    const start = performance.now();
+    const duration = 700;
+    const from = 0;
+    const to = value;
 
-  return <span ref={ref}>0</span>;
+    let raf;
+    const tick = (now) => {
+      const p = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setDisplay(Math.round(from + (to - from) * eased));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [value, started]);
+
+  return (
+    <span ref={ref}>{display.toLocaleString("fa-IR")}</span>
+  );
 };
 
 export default AnimatedPrice;

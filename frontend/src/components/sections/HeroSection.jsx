@@ -1,123 +1,149 @@
 // src/components/sections/HeroSection.jsx
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowDown, Zap, Coffee } from "lucide-react";
-import FloatingIcon from "./FloatingIcon";
+import { ArrowDown, MapPin, Clock } from "lucide-react";
 
-// A new sub-component for the beautiful, continuously floating particles background,
-// inspired by the user's provided example.
-const FloatingAura = () => {
-  const particleCount = 25; // Number of particles
-  const particles = Array.from({ length: particleCount }).map((_, i) => {
-    const size = Math.random() * 4 + 2; // Particle size between 2px and 6px
-    const duration = Math.random() * 20 + 15; // Animation duration between 15s and 35s
-    const delay = Math.random() * -20; // Negative delay for staggered start
-    const startX = Math.random() * 100;
-    const startY = Math.random() * 100;
-
-    // Custom properties for the CSS animation
-    const style = {
-      width: `${size}px`,
-      height: `${size}px`,
-      left: `${startX}%`,
-      top: `${startY}%`,
-      animation: `float ${duration}s ${delay}s infinite ease-in-out`,
-      "--end-x": `${Math.random() * 100}vw`,
-      "--end-y": `${Math.random() * 100}vh`,
-    };
-    return (
-      <div
-        key={i}
-        className="absolute rounded-full bg-amber-400/20 dark:bg-amber-300/15"
-        style={style}
-      ></div>
-    );
-  });
-
-  return (
-    <div className="absolute inset-0 z-0 overflow-hidden">{particles}</div>
-  );
+const heroVariants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: (i) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: 0.15 + i * 0.12, type: "spring", stiffness: 120, damping: 20 },
+  }),
 };
 
 const HeroSection = () => {
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: { type: "spring", stiffness: 100 },
-    },
-  };
-
   return (
-    <section className="relative min-h-screen flex items-center justify-center text-center px-4 overflow-hidden bg-[#FFFBF5] dark:bg-[#1A120B]">
-      {/* Injecting the keyframes animation directly, similar to the example */}
-      <style>{`
-                @keyframes float {
-                    0% { transform: translate(0, 0); }
-                    50% { transform: translate(var(--end-x), var(--end-y)); }
-                    100% { transform: translate(0, 0); }
-                }
-            `}</style>
+    <section className="relative min-h-[100dvh] flex items-center overflow-hidden bg-bone dark:bg-night">
+      {/* Ambient background — soft saffron glow top, subtle grain feel */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full bg-saffron/10 dark:bg-saffron/15 blur-[120px]" />
+        <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] rounded-full bg-espresso/5 dark:bg-espresso/10 blur-[100px]" />
+      </div>
 
-      <FloatingAura />
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center py-24 lg:py-16">
+          {/* --- Copy (RTL: right column first) --- */}
+          <div className="order-2 lg:order-1 text-right">
+            <motion.span
+              custom={0}
+              variants={heroVariants}
+              initial="hidden"
+              animate="visible"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-saffron-soft dark:bg-saffron/10 text-saffron-deep dark:text-saffron-glow text-sm font-bold"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-saffron dark:bg-saffron-glow" />
+              قهوه تخصصی و تازه
+            </motion.span>
 
-      {/* Seamless Fade-out Gradient at the bottom */}
-      <div className="absolute bottom-0 left-0 w-full h-48 z-10 bg-gradient-to-t from-[#FFFBF5] to-transparent dark:from-[#1A120B]"></div>
+            <motion.h1
+              custom={1}
+              variants={heroVariants}
+              initial="hidden"
+              animate="visible"
+              className="mt-6 font-display text-6xl sm:text-7xl lg:text-8xl leading-[1.1] text-ink dark:text-bone"
+            >
+              قهوه‌ای که با
+              <br />
+              <span className="text-saffron dark:text-saffron-glow">قاب ایرانی</span>
+              {" "}سرو می‌شود
+            </motion.h1>
 
-      {/* Main Content Container */}
-      <motion.div
-        className="relative z-20"
-        initial="hidden"
-        animate="visible"
-        variants={{
-          visible: { transition: { staggerChildren: 0.2, delayChildren: 0.3 } },
-        }}
-      >
-        <div className="relative">
-          <FloatingIcon
-            Icon={Coffee}
-            pos={{ top: "50%", left: "-15%" }}
-            delay={1.2}
-          />
-          <FloatingIcon
-            Icon={Zap}
-            pos={{ top: "50%", right: "-15%" }}
-            delay={1.4}
-          />
+            <motion.p
+              custom={2}
+              variants={heroVariants}
+              initial="hidden"
+              animate="visible"
+              className="mt-6 max-w-xl text-lg text-espresso/70 dark:text-muted leading-relaxed"
+            >
+              در کافه مهراس، هر فنجان یک تجربه است؛ از دانه‌های تازه‌رست تا
+              دم‌آوری دقیق. جایی برای آهسته نوشیدن، گفتگو و لحظه‌های خوب.
+            </motion.p>
 
-          <motion.h1
-            variants={itemVariants}
-            className="text-6xl sm:text-7xl md:text-8xl font-black bg-clip-text text-transparent bg-gradient-to-r from-amber-600 via-orange-400 to-amber-600 dark:from-yellow-400 dark:via-amber-300 dark:to-yellow-400"
-            style={{
-              animation: "gradient-animation 5s ease infinite",
-              backgroundSize: "200% 200%",
-            }}
+            <motion.div
+              custom={3}
+              variants={heroVariants}
+              initial="hidden"
+              animate="visible"
+              className="mt-10 flex flex-wrap gap-4 items-center"
+            >
+              <a
+                href="#menu"
+                className="group inline-flex items-center gap-2 px-8 py-4 rounded-full bg-saffron text-bone dark:text-night font-bold text-lg hover:bg-saffron-deep transition-colors shadow-saffron"
+              >
+                مشاهده منو
+                <ArrowDown className="w-5 h-5 transition-transform group-hover:translate-y-1" />
+              </a>
+              <a
+                href="#main-footer"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-full border-2 border-espresso/15 dark:border-night-line text-espresso dark:text-bone font-bold text-lg hover:border-saffron hover:text-saffron dark:hover:text-saffron-glow transition-colors"
+              >
+                تماس با ما
+              </a>
+            </motion.div>
+
+            <motion.div
+              custom={4}
+              variants={heroVariants}
+              initial="hidden"
+              animate="visible"
+              className="mt-12 flex flex-wrap items-center gap-6 text-sm text-espresso/60 dark:text-muted"
+            >
+              <span className="flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-saffron" />
+                تهران، خیابان ولیعصر
+              </span>
+              <span className="flex items-center gap-2">
+                <Clock className="w-4 h-4 text-saffron" />
+                همه‌روزه ۸ تا ۲۴
+              </span>
+            </motion.div>
+          </div>
+
+          {/* --- Media: Persian arch frame --- */}
+          <motion.div
+            custom={2}
+            variants={heroVariants}
+            initial="hidden"
+            animate="visible"
+            className="order-1 lg:order-2 relative flex justify-center lg:justify-end"
           >
-            کافه مهراس
-          </motion.h1>
+            <div className="relative w-full max-w-[520px]">
+              {/* Persian arch frame — ogival arch via CSS border-radius (cross-browser, no clip-path needed) */}
+              <div
+                className="relative overflow-hidden shadow-warm-lg"
+                style={{
+                  borderRadius: "50% 50% 2rem 2rem / 22% 22% 2rem 2rem",
+                  border: "4px solid rgba(201, 123, 45, 0.4)",
+                }}
+              >
+                <img
+                  src="/images/hero-coffee.jpg"
+                  alt="فنجان قهوه تخصصی مهراس"
+                  className="w-full h-[420px] sm:h-[520px] object-cover"
+                />
+                {/* Warm gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-night/40 via-transparent to-transparent" />
+              </div>
 
-          <motion.p
-            variants={itemVariants}
-            className="mt-8 max-w-xl mx-auto text-base sm:text-lg md:text-xl text-stone-700 dark:text-stone-200 font-medium"
-          >
-            <span className="relative inline-block px-4 py-2">
-              <span className="absolute inset-0 bg-gradient-to-r from-amber-500 to-orange-400 rounded-lg blur-xl opacity-40 dark:opacity-60"></span>
-              <span className="relative">عشق و قهوه در هوای شهر</span>
-            </span>
-          </motion.p>
+              {/* Floating badge — roasted fresh */}
+              <motion.div
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute -bottom-6 -right-4 sm:-right-8 bg-bone dark:bg-night-soft rounded-2xl shadow-warm-lg px-5 py-4 flex items-center gap-3 border-2 border-saffron/30 dark:border-saffron-glow/40"
+              >
+                <span className="w-10 h-10 rounded-full bg-saffron/15 flex items-center justify-center">
+                  <span className="w-3 h-3 rounded-full bg-saffron" />
+                </span>
+                <div>
+                  <p className="font-bold text-ink dark:text-bone">رست تازه</p>
+                  <p className="text-xs text-espresso/60 dark:text-muted">دانه‌های امروز</p>
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
         </div>
-
-        <motion.div variants={itemVariants}>
-          <a
-            href="#menu"
-            className="group inline-flex items-center justify-center mt-10 px-6 py-3 sm:px-8 sm:py-4 font-bold text-amber-800 dark:text-yellow-300 bg-amber-400/30 dark:bg-yellow-400/10 border border-amber-500/50 dark:border-yellow-400/30 rounded-xl hover:bg-amber-400/50 dark:hover:bg-yellow-400/20 transition-all duration-300 transform hover:scale-105 shadow-[0_0_20px_rgba(245,158,11,0.2)] hover:shadow-[0_0_30px_rgba(245,158,11,0.4)] dark:shadow-[0_0_20px_rgba(250,204,21,0.1)] dark:hover:shadow-[0_0_30px_rgba(250,204,21,0.2)]"
-          >
-            مشاهده منو{" "}
-            <ArrowDown className="w-5 h-5 mr-2 transition-transform duration-300 group-hover:translate-y-1" />
-          </a>
-        </motion.div>
-      </motion.div>
+      </div>
     </section>
   );
 };
