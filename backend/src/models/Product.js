@@ -26,6 +26,10 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    sortOrder: {
+      type: Number,
+      default: 0, // stable menu order (seed sets 0..57)
+    },
   },
   {
     // timestamps به صورت خودکار دو فیلد createdAt و updatedAt را اضافه می‌کند

@@ -129,6 +129,7 @@ const HeroSection = () => {
                 <img
                   src={img("/images/hero-coffee.jpg")}
                   alt="فنجان قهوه تخصصی مهراس"
+                  fetchpriority="high"
                   className="w-full h-[300px] sm:h-[420px] lg:h-[520px] object-cover"
                 />
                 {/* Warm gradient overlay */}

@@ -23,8 +23,20 @@ const SteamPath = ({ delay, x, duration = 2.2 }) => (
 
 const Preloader = ({ onComplete }) => {
   const [progress, setProgress] = useState(0);
+  const [done, setDone] = useState(false);
 
   useEffect(() => {
+    // Returning visitors (session active) or reduced-motion users skip the preloader.
+    const skip =
+      sessionStorage.getItem("mehras_visited") === "1" ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (skip) {
+      setDone(true);
+      onComplete();
+      return;
+    }
+    sessionStorage.setItem("mehras_visited", "1");
+
     const start = performance.now();
     const duration = 1600;
     let raf;
@@ -33,11 +45,13 @@ const Preloader = ({ onComplete }) => {
       const eased = 1 - Math.pow(1 - p, 3);
       setProgress(Math.round(eased * 100));
       if (p < 1) raf = requestAnimationFrame(tick);
-      else setTimeout(onComplete, 400);
+      else setTimeout(() => onComplete(), 400);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, [onComplete]);
+
+  if (done) return null;
 
   return (
     <motion.div

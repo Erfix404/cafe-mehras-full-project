@@ -29,7 +29,11 @@ function App() {
   const handleLogin = async (password) => {
     const backendUp = await checkBackend();
     if (!backendUp) {
-      // demo mode — backend offline, show everything with bundled data
+      // demo mode — backend offline. Require the default demo password so
+      // the panel isn't open to anyone who finds the URL.
+      if (password !== "mehras2024") {
+        throw new Error("رمز عبور اشتباه است");
+      }
       setDemo(true);
       localStorage.setItem(DEMO_KEY, "1");
       setToken("demo");

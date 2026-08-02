@@ -99,10 +99,13 @@ const StorySection = () => {
                   <img
                     src={card.img}
                     alt={card.title}
+                    width={800}
+                    height={600}
                     className={`absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 ${
                       card.big ? "" : "opacity-90"
                     }`}
                     loading="lazy"
+                    decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-night/80 via-night/20 to-transparent" />
                 </>

@@ -20,8 +20,9 @@ const FlyingCartItems = () => {
             zIndex: 100,
           }}
           animate={{
-            x: window.innerWidth - 80, // Target x (near cart icon)
-            y: window.innerHeight - 80, // Target y (near cart icon)
+            // fly toward the floating cart icon (bottom-right)
+            x: window.innerWidth - 96,
+            y: window.innerHeight - 96,
             width: 20,
             height: 20,
             opacity: 0,

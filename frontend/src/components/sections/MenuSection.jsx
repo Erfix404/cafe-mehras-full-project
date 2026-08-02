@@ -34,8 +34,12 @@ const MenuSection = () => {
     getMenu();
   }, []);
 
+  const syrups = menu.filter((item) => item.category === "سیروپ");
+  const safeCategory = categories.includes(activeCategory)
+    ? activeCategory
+    : "همه";
   const filteredItems = menu
-    .filter((item) => activeCategory === "همه" || item.category === activeCategory)
+    .filter((item) => safeCategory === "همه" || item.category === safeCategory)
     .filter((item) => item.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
@@ -144,7 +148,11 @@ const MenuSection = () => {
       </div>
       <AnimatePresence>
         {selectedItem && (
-          <MenuModal item={selectedItem} onClose={() => setSelectedItem(null)} />
+          <MenuModal
+            item={selectedItem}
+            onClose={() => setSelectedItem(null)}
+            syrups={syrups}
+          />
         )}
       </AnimatePresence>
     </section>

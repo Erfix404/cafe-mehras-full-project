@@ -1,0 +1,17 @@
+{
+  "short_name": "کافه مهراس",
+  "name": "کافه مهراس | قهوه تخصصی با قاب ایرانی",
+  "description": "قهوه تخصصی با قاب ایرانی؛ منوی کافه مهراس",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#12100e",
+  "theme_color": "#12100e",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

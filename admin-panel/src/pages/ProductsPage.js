@@ -51,6 +51,12 @@ function ProductsPage({ token, user, view, setView, logout, demo, demoData }) {
     load();
   }, [load]);
 
+  // recompute categories from live products (demo-mode mutations change them)
+  useEffect(() => {
+    if (!products) return;
+    setCats([...new Set(products.map((p) => p.category))].sort());
+  }, [products]);
+
   const filtered = (products || []).filter((p) => {
     const okQ = !query || (p.name || "").includes(query);
     const okC = !cat || p.category === cat;
@@ -61,6 +67,12 @@ function ProductsPage({ token, user, view, setView, logout, demo, demoData }) {
   useEffect(() => {
     setPage(1);
   }, [query, cat]);
+
+  // clamp page when items shrink (delete on last page, filter narrows)
+  useEffect(() => {
+    const max = Math.max(1, Math.ceil((filtered?.length || 0) / PAGE_SIZE));
+    setPage((p) => Math.min(p, max));
+  }, [filtered.length, query, cat]);
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const pageItems = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -198,10 +210,22 @@ function ProductsPage({ token, user, view, setView, logout, demo, demoData }) {
                     <tr key={p._id}>
                       <td>
                         <div className="p-cell">
-                          <img src={imgSrc(p)} alt={p.name} onError={(e) => { e.target.style.display = "none"; }} />
+                          <img
+                            src={imgSrc(p)}
+                            alt={p.name}
+                            loading="lazy"
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src = img("/images/espresso.jpg");
+                            }}
+                          />
                           <div>
                             <div className="p-name">{p.name}</div>
-                            {p.description && <div className="p-desc">{p.description}</div>}
+                            {p.description ? (
+                              <div className="p-desc">{p.description}</div>
+                            ) : (
+                              <div className="p-desc">—</div>
+                            )}
                           </div>
                         </div>
                       </td>

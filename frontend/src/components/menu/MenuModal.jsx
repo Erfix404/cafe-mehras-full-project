@@ -6,26 +6,26 @@ import { useCart } from "../../context/CartContext";
 import { useToast } from "../../context/ToastContext";
 import useBodyScrollLock from "../../hooks/useBodyScrollLock";
 import useFocusTrap from "../../hooks/useFocusTrap";
-import { api } from "../../api/mockAPI";
 
-const MenuModal = ({ item, onClose }) => {
+const MenuModal = ({ item, onClose, syrups }) => {
   const { addToCart } = useCart();
   const { addToast } = useToast();
   const [quantity, setQuantity] = useState(1);
   const modalRef = useRef(null);
-  const [syrups, setSyrups] = useState([]);
   const [selectedSyrup, setSelectedSyrup] = useState(null);
   const [isAddonsOpen, setIsAddonsOpen] = useState(false);
 
   useBodyScrollLock(true);
   useFocusTrap(modalRef, true);
 
+  // Close modal on Escape key
   useEffect(() => {
-    api.fetchMenuData().then((data) => {
-      const syrupItems = data.filter((d) => d.category === "سیروپ");
-      setSyrups(syrupItems);
-    });
-  }, []);
+    const handleEsc = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, [onClose]);
 
   const handleSyrupSelect = (syrup) => {
     if (selectedSyrup && selectedSyrup.id === syrup.id) {
@@ -35,13 +35,15 @@ const MenuModal = ({ item, onClose }) => {
     }
   };
 
-  const finalItemPrice = item.price + (selectedSyrup ? selectedSyrup.price : 0);
+  const finalItemPrice =
+    (item.price || 0) + (selectedSyrup ? selectedSyrup.price || 0 : 0);
   const totalPrice = finalItemPrice * quantity;
 
   const handleAddToCart = () => {
     const itemToAdd = {
       ...item,
-      id: selectedSyrup ? `${item.id}-${selectedSyrup.id}` : item.id,
+      // stable variant id: syrup items keep their own cart line (price included)
+      id: selectedSyrup ? `${item.id}-s${selectedSyrup.id}` : String(item.id),
       name: selectedSyrup
         ? `${item.name} (با سیروپ ${selectedSyrup.name})`
         : item.name,
@@ -69,6 +71,9 @@ const MenuModal = ({ item, onClose }) => {
     >
       <motion.div
         ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label={item.name}
         layoutId={`card-container-${item.id}`}
         transition={{ type: "spring", stiffness: 600, damping: 45 }}
         className="relative w-full max-w-2xl bg-bone dark:bg-night-soft rounded-3xl border border-saffron/20 dark:border-saffron-glow/15 shadow-warm-lg overflow-hidden"
@@ -86,6 +91,8 @@ const MenuModal = ({ item, onClose }) => {
             layoutId={`card-image-${item.id}`}
             src={item.image}
             alt={item.name}
+            width={672}
+            height={288}
             className="w-full h-60 sm:h-72 object-cover"
             loading="lazy"
           />

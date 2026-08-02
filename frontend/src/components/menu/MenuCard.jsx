@@ -57,8 +57,11 @@ const MenuCard = memo(({ item, onSelect }) => {
               layoutId={`card-image-${item.id}`}
               src={item.image}
               alt={item.name}
+              width={400}
+              height={208}
               className="w-full h-52 object-cover"
               loading="lazy"
+              decoding="async"
               animate={{ scale: isHovered ? 1.08 : 1 }}
               transition={{ type: "spring", stiffness: 300, damping: 18 }}
             />

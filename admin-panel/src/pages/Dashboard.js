@@ -14,6 +14,7 @@ import {
 function Dashboard({ token, user, view, setView, logout, demo, demoData }) {
   const [stats, setStats] = useState(null);
   const [error, setError] = useState("");
+  const [tick, setTick] = useState(0);
 
   useEffect(() => {
     if (demo && demoData) {
@@ -25,10 +26,11 @@ function Dashboard({ token, user, view, setView, logout, demo, demoData }) {
       });
       return;
     }
+    setError("");
     getStats(token)
       .then(setStats)
       .catch((e) => setError(e.message));
-  }, [token, demo, demoData]);
+  }, [token, demo, demoData, tick]);
 
   return (
     <div className="shell">
@@ -76,7 +78,20 @@ function Dashboard({ token, user, view, setView, logout, demo, demoData }) {
           </div>
         )}
 
-        {error && <div className="auth-error" style={{ marginBottom: "1rem" }}>{error}</div>}
+        {error && (
+          <div
+            className="auth-error"
+            style={{ marginBottom: "1rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}
+          >
+            <span>{error}</span>
+            <button
+              className="btn btn-ghost btn-sm"
+              onClick={() => setTick((t) => t + 1)}
+            >
+              تلاش دوباره
+            </button>
+          </div>
+        )}
 
         <div className="stats-grid">
           <div className="stat-card">

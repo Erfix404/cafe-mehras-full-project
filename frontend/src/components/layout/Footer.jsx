@@ -35,7 +35,30 @@ const Footer = () => {
   }, []);
 
   const handleCopy = (text) => {
-    navigator.clipboard.writeText(text);
+    // clipboard API can fail on http / insecure contexts — fallback to execCommand
+    const fallback = () => {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand("copy");
+      } catch (e) {
+        /* ignore */
+      }
+      document.body.removeChild(ta);
+    };
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text);
+      } else {
+        fallback();
+      }
+    } catch (e) {
+      fallback();
+    }
     setCopiedPhone(true);
     setTimeout(() => setCopiedPhone(false), 2000);
   };
@@ -59,6 +82,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <motion.div
             className="w-full h-80 md:h-96 rounded-3xl overflow-hidden shadow-warm-lg border border-night-line"
+            dir="ltr" // Google Maps embed must not mirror in RTL pages
             variants={{
               hidden: { opacity: 0, x: -50 },
               visible: {

@@ -82,6 +82,7 @@ input, select, textarea { font-family: inherit; }
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
+.field select { direction: rtl; }
 .field input:focus, .field select:focus, .field textarea:focus {
   border-color: var(--saffron);
   box-shadow: 0 0 0 3px rgba(201, 123, 45, 0.15);
@@ -395,7 +396,6 @@ table.admin-table { width: 100%; border-collapse: collapse; }
   }
   .sidebar .brand { margin-bottom: 0; margin-left: auto; }
   .nav-item { width: auto; padding: 0.55rem 0.8rem; font-size: 0.8rem; }
-  .nav-item span { display: none; }
   .sidebar .logout { margin-top: 0; }
   .main { margin-right: 0; padding: 1.25rem; }
   .stats-grid { grid-template-columns: 1fr 1fr; }

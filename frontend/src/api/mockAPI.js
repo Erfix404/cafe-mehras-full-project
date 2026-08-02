@@ -1,5 +1,6 @@
 // src/api/mockAPI.js
 import { img } from "../assets";
+import contactInfo from "./contact";
 
 const menuData = [
 {
@@ -482,14 +483,6 @@ const menuData = [
   }
 ];
 
-const contactInfo = {
-  location: "شاهرود، خیابان ۲۲ بهمن، بالاتر از بیمارستان بهار",
-  googleMapUrl: "https://maps.app.goo.gl/55XapETdnWmKDfuy7",
-  instagramUser: "cafe_mehras",
-  phone: "09127734353",
-  telegramUser: "Mahdi_d01",
-};
-
 export const api = {
   fetchMenuData: async () => {
     // Try the real backend first (Express + MongoDB on :5001)
@@ -518,3 +511,5 @@ export const api = {
   fetchContactInfo: () =>
     new Promise((resolve) => setTimeout(() => resolve(contactInfo), 100)),
 };
+
+export { menuData };

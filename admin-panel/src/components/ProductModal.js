@@ -1,5 +1,6 @@
 // src/components/ProductModal.js — add / edit product form
 import React, { useState } from "react";
+import { img } from "../img";
 
 function ProductModal({ product, images, cats, onClose, onSave }) {
   const editing = !!product;
@@ -27,7 +28,7 @@ function ProductModal({ product, images, cats, onClose, onSave }) {
           name: form.name.trim(),
           price: form.price === "" ? null : Number(form.price),
           category: form.category.trim(),
-          image: form.image,
+          image: form.image.trim(),
           description: form.description.trim(),
         },
         product?._id
@@ -36,6 +37,15 @@ function ProductModal({ product, images, cats, onClose, onSave }) {
       setError(err.message);
       setBusy(false);
     }
+  };
+
+  // normalize "/images/x.jpg" → absolute URL for the live preview
+  const previewSrc = form.image ? img(form.image) : "";
+  const [previewBroken, setPreviewBroken] = useState(false);
+
+  const pickImage = (im) => {
+    setForm({ ...form, image: im });
+    setPreviewBroken(false);
   };
 
   return (
@@ -77,7 +87,7 @@ function ProductModal({ product, images, cats, onClose, onSave }) {
                 <button
                   type="button"
                   key={im}
-                  onClick={() => setForm({ ...form, image: im })}
+                  onClick={() => pickImage(im)}
                   style={{
                     width: 56, height: 56, padding: 0, overflow: "hidden",
                     borderRadius: "50% 50% 10px 10px / 22% 22% 10px 10px",
@@ -89,13 +99,35 @@ function ProductModal({ product, images, cats, onClose, onSave }) {
                 </button>
               ))}
             </div>
-            <input
-              value={form.image}
-              onChange={set("image")}
-              placeholder="یا آدرس دلخواه تصویر (URL)…"
-              dir="ltr"
-              style={{ textAlign: "left" }}
-            />
+            <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
+              <input
+                value={form.image}
+                onChange={(e) => {
+                  setForm({ ...form, image: e.target.value });
+                  setPreviewBroken(false);
+                }}
+                placeholder="یا آدرس دلخواه تصویر (URL)…"
+                dir="ltr"
+                style={{ textAlign: "left", flex: 1 }}
+              />
+              {previewSrc && !previewBroken && (
+                <img
+                  src={previewSrc}
+                  alt="پیش‌نمایش"
+                  onError={() => setPreviewBroken(true)}
+                  style={{
+                    width: 44, height: 44, objectFit: "cover", flexShrink: 0,
+                    borderRadius: "50% 50% 8px 8px / 22% 22% 8px 8px",
+                    border: "1.5px solid var(--line)",
+                  }}
+                />
+              )}
+            </div>
+            {previewBroken && (
+              <div className="auth-error" style={{ marginTop: "0.5rem", marginBottom: 0 }}>
+                تصویر پیدا نشد — آدرس را بررسی کنید یا یکی از گالری را انتخاب کنید.
+              </div>
+            )}
           </div>
 
           <div style={{ display: "flex", gap: "0.75rem", justifyContent: "flex-start", marginTop: "1.25rem" }}>

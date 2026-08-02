@@ -1,8 +1,12 @@
 // backend/src/middleware/auth.js — minimal admin auth (HMAC token)
 const crypto = require("crypto");
 
+// Fail closed: no default secret. Server refuses to start without ADMIN_SECRET.
 function sign(username) {
-  const secret = process.env.ADMIN_SECRET || "change-me";
+  const secret = process.env.ADMIN_SECRET;
+  if (!secret) {
+    throw new Error("ADMIN_SECRET is not set");
+  }
   return crypto
     .createHmac("sha256", secret)
     .update(username)

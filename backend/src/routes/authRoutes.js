@@ -5,11 +5,14 @@ const Product = require("../models/Product");
 const { sign, auth } = require("../middleware/auth");
 
 // POST /api/auth/login — { username, password } → { token }
-// password verified against ADMIN_PASSWORD env (default: "mehras2024")
+// password verified against ADMIN_PASSWORD env (fail closed: no default)
 router.post("/login", async (req, res) => {
   const { username, password } = req.body || {};
   const user = username || "admin";
-  const pass = process.env.ADMIN_PASSWORD || "mehras2024";
+  const pass = process.env.ADMIN_PASSWORD;
+  if (!pass) {
+    return res.status(500).json({ msg: "سرور به درستی پیکربندی نشده است (ADMIN_PASSWORD)" });
+  }
   if (!password || password !== pass) {
     return res.status(401).json({ msg: "نام کاربری یا رمز عبور اشتباه است" });
   }

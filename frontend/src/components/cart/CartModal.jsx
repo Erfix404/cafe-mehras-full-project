@@ -1,10 +1,11 @@
 // src/components/cart/CartModal.jsx
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Plus, Minus, Trash2, ShoppingCart } from "lucide-react";
+import { X, Plus, Minus, Trash2, ShoppingCart, Send } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 import useBodyScrollLock from "../../hooks/useBodyScrollLock";
 import useFocusTrap from "../../hooks/useFocusTrap";
+import contactInfo from "../../api/contact";
 
 const CartModal = () => {
   const {
@@ -17,6 +18,7 @@ const CartModal = () => {
     clearCart,
   } = useCart();
   const modalRef = useRef(null);
+  const [confirming, setConfirming] = useState(false);
 
   // Custom hooks for advanced functionality
   useBodyScrollLock(isCartOpen);
@@ -27,11 +29,39 @@ const CartModal = () => {
     const handleEsc = (e) => {
       if (e.key === "Escape") {
         setIsCartOpen(false);
+        setConfirming(false);
       }
     };
     window.addEventListener("keydown", handleEsc);
     return () => window.removeEventListener("keydown", handleEsc);
   }, [setIsCartOpen]);
+
+  const buildOrderText = () => {
+    const lines = cartItems.map(
+      (item, i) =>
+        `${i + 1}. ${item.name} × ${item.quantity} — ${(
+          item.price * item.quantity
+        ).toLocaleString("fa-IR")} هزار تومان`
+    );
+    return [
+      "☕ سفارش جدید از سایت کافه مهراس",
+      ...lines,
+      `— مجموع: ${totalPrice.toLocaleString("fa-IR")} هزار تومان`,
+    ].join("\n");
+  };
+
+  const handleCheckout = () => {
+    if (cartItems.length === 0) return;
+    setConfirming(true);
+  };
+
+  const confirmOrder = () => {
+    const text = encodeURIComponent(buildOrderText());
+    window.open(`https://t.me/${contactInfo.telegramUser}?text=${text}`, "_blank");
+    clearCart();
+    setIsCartOpen(false);
+    setConfirming(false);
+  };
 
   return (
     <AnimatePresence>
@@ -45,6 +75,9 @@ const CartModal = () => {
         >
           <motion.div
             ref={modalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="سبد خرید"
             initial={{ y: "100vh", opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: "100vh", opacity: 0 }}
@@ -79,6 +112,36 @@ const CartModal = () => {
                     سبد خرید شما خالی است.
                   </p>
                 </div>
+              ) : confirming ? (
+                <div className="text-center py-6">
+                  <div className="w-16 h-20 mx-auto mb-4 rounded-[50%_50%_1rem_1rem/22%_22%_1rem_1rem] border-2 border-saffron/60 bg-saffron/10 flex items-center justify-center text-2xl">
+                    ☕
+                  </div>
+                  <h3 className="font-display text-xl text-ink dark:text-bone mb-2">
+                    ثبت سفارش
+                  </h3>
+                  <p className="text-sm text-espresso/70 dark:text-muted mb-4 leading-relaxed">
+                    سفارش شما در تلگرام به کافه مهراس ارسال می‌شود و هماهنگی
+                    نهایی در پیام‌رسان انجام می‌شود.
+                  </p>
+                  <div className="text-right bg-bone-strong/60 dark:bg-night rounded-xl p-4 mb-5 text-sm whitespace-pre-line leading-relaxed text-ink dark:text-bone max-h-48 overflow-y-auto">
+                    {buildOrderText()}
+                  </div>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={confirmOrder}
+                      className="flex-1 py-3.5 bg-saffron text-night dark:text-bone font-bold rounded-xl hover:bg-saffron-deep hover:text-bone transition-colors shadow-saffron"
+                    >
+                      ارسال سفارش در تلگرام
+                    </button>
+                    <button
+                      onClick={() => setConfirming(false)}
+                      className="px-5 py-3.5 bg-bone-strong dark:bg-night text-espresso dark:text-bone font-bold rounded-xl hover:bg-bone-line/60 transition-colors"
+                    >
+                      بازگشت
+                    </button>
+                  </div>
+                </div>
               ) : (
                 <ul className="space-y-4">
                   <AnimatePresence>
@@ -104,6 +167,7 @@ const CartModal = () => {
                           src={item.image}
                           alt={item.name}
                           className="w-20 h-20 rounded-lg object-cover"
+                          loading="lazy"
                         />
                         <div className="flex-grow">
                           <h3 className="font-bold text-ink dark:text-bone">
@@ -154,7 +218,7 @@ const CartModal = () => {
             </div>
 
             {/* Modal Footer */}
-            {cartItems.length > 0 && (
+            {cartItems.length > 0 && !confirming && (
               <div className="p-6 border-t border-bone-line dark:border-night-line bg-bone/60 dark:bg-night/40">
                 <div className="flex justify-between items-center mb-4">
                   <span className="text-lg font-medium text-espresso/70 dark:text-muted">
@@ -164,8 +228,12 @@ const CartModal = () => {
                     {totalPrice.toLocaleString("fa-IR")} هزار تومان
                   </span>
                 </div>
-                <button className="w-full py-4 bg-saffron text-night dark:text-bone font-bold text-lg rounded-xl hover:bg-saffron-deep hover:text-bone transition-colors shadow-lg hover:shadow-saffron">
-                  پرداخت و ثبت نهایی
+                <button
+                  onClick={handleCheckout}
+                  className="w-full py-4 bg-saffron text-night dark:text-bone font-bold text-lg rounded-xl hover:bg-saffron-deep hover:text-bone transition-colors shadow-lg hover:shadow-saffron flex items-center justify-center gap-2"
+                >
+                  <Send size={18} />
+                  ثبت سفارش
                 </button>
                 <button
                   onClick={clearCart}

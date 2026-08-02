@@ -60,7 +60,10 @@ const InstagramSection = () => {
               <img
                 src={post.img}
                 alt={post.alt}
+                width={400}
+                height={400}
                 loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-night/0 group-hover:bg-night/40 transition-colors duration-300 flex items-center justify-center">
