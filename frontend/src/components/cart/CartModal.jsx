@@ -40,7 +40,7 @@ const CartModal = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 bg-night/70 backdrop-blur-md z-50 flex items-center justify-center p-4"
           onClick={() => setIsCartOpen(false)} // Close on overlay click
         >
           <motion.div
@@ -49,18 +49,18 @@ const CartModal = () => {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: "100vh", opacity: 0 }}
             transition={{ type: "spring", stiffness: 400, damping: 40 }}
-            className="relative w-full max-w-lg bg-[#FFFBF5] dark:bg-[#1A120B] rounded-3xl shadow-2xl overflow-hidden flex flex-col"
+            className="relative w-full max-w-lg bg-bone dark:bg-night-soft rounded-3xl shadow-2xl overflow-hidden flex flex-col"
             style={{ maxHeight: "90vh" }}
             onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
           >
             {/* Modal Header */}
-            <div className="flex items-center justify-between p-6 border-b border-stone-200 dark:border-stone-800">
-              <h2 className="text-2xl font-bold text-stone-800 dark:text-white">
+            <div className="flex items-center justify-between p-6 border-b border-bone-line dark:border-night-line">
+              <h2 className="font-display text-2xl text-ink dark:text-bone">
                 سبد خرید شما
               </h2>
               <button
                 onClick={() => setIsCartOpen(false)}
-                className="p-2 rounded-full hover:bg-stone-200 dark:hover:bg-stone-700 transition-colors"
+                className="p-2 rounded-full hover:bg-bone-strong dark:hover:bg-night transition-colors"
                 aria-label="بستن"
               >
                 <X />
@@ -73,9 +73,9 @@ const CartModal = () => {
                 <div className="text-center py-16">
                   <ShoppingCart
                     size={48}
-                    className="mx-auto text-stone-400 dark:text-stone-600"
+                    className="mx-auto text-espresso/40 dark:text-muted"
                   />
-                  <p className="mt-4 text-stone-600 dark:text-stone-400">
+                  <p className="mt-4 text-espresso/60 dark:text-muted">
                     سبد خرید شما خالی است.
                   </p>
                 </div>
@@ -106,19 +106,19 @@ const CartModal = () => {
                           className="w-20 h-20 rounded-lg object-cover"
                         />
                         <div className="flex-grow">
-                          <h3 className="font-bold text-stone-800 dark:text-stone-100">
+                          <h3 className="font-bold text-ink dark:text-bone">
                             {item.name}
                           </h3>
-                          <p className="text-sm text-amber-700 dark:text-yellow-400">
+                          <p className="text-sm text-saffron-deep dark:text-saffron-glow">
                             {item.price.toLocaleString("fa-IR")} هزار تومان
                           </p>
                         </div>
-                        <div className="flex items-center gap-2 bg-stone-200/50 dark:bg-stone-800/50 rounded-full p-1">
+                        <div className="flex items-center gap-2 bg-bone-strong/70 dark:bg-night rounded-full p-1">
                           <button
                             onClick={() =>
                               updateQuantity(item.id, item.quantity + 1)
                             }
-                            className="p-1.5 rounded-full hover:bg-stone-300 dark:hover:bg-stone-700"
+                            className="p-1.5 rounded-full hover:bg-saffron/15"
                             aria-label="افزایش تعداد"
                           >
                             <Plus size={16} />
@@ -133,7 +133,7 @@ const CartModal = () => {
                             onClick={() =>
                               updateQuantity(item.id, item.quantity - 1)
                             }
-                            className="p-1.5 rounded-full hover:bg-stone-300 dark:hover:bg-stone-700"
+                            className="p-1.5 rounded-full hover:bg-saffron/15"
                             aria-label="کاهش تعداد"
                           >
                             <Minus size={16} />
@@ -141,7 +141,7 @@ const CartModal = () => {
                         </div>
                         <button
                           onClick={() => removeFromCart(item.id)}
-                          className="p-2 text-stone-500 hover:text-red-500 dark:hover:text-red-400 transition-colors rounded-full hover:bg-red-500/10"
+                          className="p-2 text-espresso/50 dark:text-muted hover:text-saffron-deep dark:hover:text-saffron-glow transition-colors rounded-full hover:bg-saffron/10"
                           aria-label={`حذف ${item.name}`}
                         >
                           <Trash2 size={18} />
@@ -155,21 +155,21 @@ const CartModal = () => {
 
             {/* Modal Footer */}
             {cartItems.length > 0 && (
-              <div className="p-6 border-t border-stone-200 dark:border-stone-800 bg-white/50 dark:bg-black/20">
+              <div className="p-6 border-t border-bone-line dark:border-night-line bg-bone/60 dark:bg-night/40">
                 <div className="flex justify-between items-center mb-4">
-                  <span className="text-lg font-medium text-stone-600 dark:text-stone-300">
+                  <span className="text-lg font-medium text-espresso/70 dark:text-muted">
                     مبلغ کل:
                   </span>
-                  <span className="text-2xl font-bold text-stone-800 dark:text-white">
+                  <span className="font-display text-2xl text-ink dark:text-bone">
                     {totalPrice.toLocaleString("fa-IR")} هزار تومان
                   </span>
                 </div>
-                <button className="w-full py-4 bg-amber-500 text-white font-bold text-lg rounded-xl hover:bg-amber-600 transition-colors shadow-lg hover:shadow-amber-500/40">
+                <button className="w-full py-4 bg-saffron text-night dark:text-bone font-bold text-lg rounded-xl hover:bg-saffron-deep hover:text-bone transition-colors shadow-lg hover:shadow-saffron">
                   پرداخت و ثبت نهایی
                 </button>
                 <button
                   onClick={clearCart}
-                  className="w-full mt-2 text-sm text-stone-500 hover:text-red-500 transition-colors"
+                  className="w-full mt-2 text-sm text-espresso/50 dark:text-muted hover:text-saffron-deep transition-colors"
                 >
                   خالی کردن سبد
                 </button>

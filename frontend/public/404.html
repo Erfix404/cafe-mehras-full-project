@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>صفحه پیدا نشد — کافه مهراس</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #faf7f2;
+        color: #1a0f0a;
+        font-family: "Vazirmatn", system-ui, sans-serif;
+        text-align: center;
+      }
+      .wrap {
+        padding: 2rem;
+      }
+      .arch {
+        width: 120px;
+        height: 140px;
+        margin: 0 auto 1.5rem;
+        border-radius: 60px 60px 12px 12px / 30px 30px 12px 12px;
+        border: 4px solid #c97b2d;
+        background:
+          radial-gradient(ellipse at 50% 30%, #c97b2d22, transparent 60%),
+          #2b211b;
+      }
+      h1 {
+        font-size: 2rem;
+        margin: 0 0 0.5rem;
+      }
+      p {
+        color: #8a6f5f;
+        margin: 0 0 1.5rem;
+      }
+      a {
+        display: inline-block;
+        padding: 0.75rem 1.75rem;
+        background: #c97b2d;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 999px;
+        font-weight: 700;
+      }
+    </style>
+    <script>
+      // SPA 404 → redirect to home
+      if (window.location.pathname !== "/cafe-mehras-full-project/") {
+        window.location.replace("/cafe-mehras-full-project/");
+      }
+    </script>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="arch"></div>
+      <h1>۴۰۴</h1>
+      <p>این فنجان خالیه! صفحه‌ای که دنبالش بودی پیدا نشد.</p>
+      <a href="/cafe-mehras-full-project/">برگشت به کافه</a>
+    </div>
+  </body>
+</html>

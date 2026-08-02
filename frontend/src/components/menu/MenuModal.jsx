@@ -64,17 +64,24 @@ const MenuModal = ({ item, onClose }) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0, transition: { duration: 0.2 } }}
-      className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-night/70 backdrop-blur-md z-50 flex items-center justify-center p-4"
       onClick={onClose}
     >
       <motion.div
         ref={modalRef}
         layoutId={`card-container-${item.id}`}
         transition={{ type: "spring", stiffness: 600, damping: 45 }}
-        className="relative w-full max-w-2xl bg-[#FFFBF5] dark:bg-[#1A120B] rounded-3xl backdrop-blur-2xl border border-white/10 dark:border-stone-800 shadow-2xl overflow-hidden"
+        className="relative w-full max-w-2xl bg-bone dark:bg-night-soft rounded-3xl border border-saffron/20 dark:border-saffron-glow/15 shadow-warm-lg overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="relative">
+        {/* Persian arch image */}
+        <div
+          className="relative overflow-hidden"
+          style={{
+            borderRadius: "50% 50% 2rem 2rem / 20% 20% 2rem 2rem",
+            borderBottom: "4px solid rgba(201, 123, 45, 0.3)",
+          }}
+        >
           <motion.img
             layoutId={`card-image-${item.id}`}
             src={item.image}
@@ -82,37 +89,39 @@ const MenuModal = ({ item, onClose }) => {
             className="w-full h-60 sm:h-72 object-cover"
             loading="lazy"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-night/40 via-transparent to-transparent" />
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 text-stone-800 dark:text-stone-300 bg-white/50 dark:bg-black/40 hover:bg-stone-200 dark:hover:bg-stone-800 rounded-full p-2 hover:scale-110 transition-all"
+            className="absolute top-4 left-4 text-ink dark:text-bone bg-bone/70 dark:bg-night/60 backdrop-blur-sm hover:bg-saffron/20 rounded-full p-2 hover:scale-110 transition-all border border-saffron/20"
             aria-label="بستن"
           >
-            <X />
+            <X size={18} />
           </button>
         </div>
+
         <div className="p-6 sm:p-8">
-          {/* === CHANGE: Made font size responsive === */}
           <motion.h3
             layoutId={`card-title-${item.id}`}
-            className="text-2xl sm:text-3xl font-bold text-stone-800 dark:text-stone-100"
+            className="font-display text-2xl sm:text-3xl text-ink dark:text-bone"
           >
             {item.name}
           </motion.h3>
-          <p className="mt-4 text-sm sm:text-base text-stone-600 dark:text-stone-300 leading-relaxed">
+          <p className="mt-4 text-sm sm:text-base text-espresso/70 dark:text-muted leading-relaxed">
             {item.description || "توضیحات این محصول به زودی اضافه خواهد شد."}
           </p>
 
           {isCustomizable && (
-            <div className="mt-6 border-t border-stone-200 dark:border-stone-800 pt-6">
+            <div className="mt-6 border-t border-bone-line dark:border-night-line pt-6">
               <button
                 onClick={() => setIsAddonsOpen(!isAddonsOpen)}
                 className="w-full flex justify-between items-center"
+                aria-expanded={isAddonsOpen}
               >
-                <h4 className="text-base sm:text-lg font-semibold text-stone-700 dark:text-stone-200">
+                <h4 className="text-base sm:text-lg font-bold text-ink dark:text-bone">
                   افزودنی‌ها
                 </h4>
                 <motion.div animate={{ rotate: isAddonsOpen ? 45 : 0 }}>
-                  <Plus className="text-stone-500 dark:text-stone-400" />
+                  <Plus className="text-saffron" />
                 </motion.div>
               </button>
               <AnimatePresence>
@@ -132,23 +141,22 @@ const MenuModal = ({ item, onClose }) => {
                           <motion.button
                             key={syrup.id}
                             onClick={() => handleSyrupSelect(syrup)}
-                            className={`relative px-4 py-2 text-xs sm:text-sm rounded-full border-2 transition-all duration-200
-                                                            ${
-                                                              isSelected
-                                                                ? "border-amber-500 bg-amber-500/20 text-amber-700 dark:text-amber-300"
-                                                                : "border-stone-300 dark:border-stone-700 text-stone-600 dark:text-stone-400 hover:border-amber-400"
-                                                            }`}
+                            className={`relative px-4 py-2 text-xs sm:text-sm rounded-full border-2 transition-all duration-200 font-medium
+                              ${
+                                isSelected
+                                  ? "border-saffron bg-saffron/15 text-saffron-deep dark:text-saffron-glow"
+                                  : "border-bone-line dark:border-night-line text-espresso/70 dark:text-muted hover:border-saffron/50"
+                              }`}
                             whileTap={{ scale: 0.95 }}
                           >
-                            {syrup.name} (+{syrup.price.toLocaleString("fa-IR")}
-                            )
+                            {syrup.name} (+{syrup.price.toLocaleString("fa-IR")})
                             {isSelected && (
                               <motion.div
                                 layoutId="selected-syrup-check"
-                                className="absolute -top-1 -right-1 bg-white dark:bg-stone-800 rounded-full"
+                                className="absolute -top-1 -right-1 bg-bone dark:bg-night-soft rounded-full"
                               >
                                 <CheckCircle
-                                  className="text-amber-500"
+                                  className="text-saffron"
                                   size={18}
                                 />
                               </motion.div>
@@ -164,36 +172,36 @@ const MenuModal = ({ item, onClose }) => {
           )}
 
           <div className="flex flex-col sm:flex-row items-center justify-between mt-8 gap-4">
-            <div className="flex items-center gap-4 bg-stone-200/50 dark:bg-stone-800/50 rounded-full p-2">
+            <div className="flex items-center gap-4 bg-bone-strong/70 dark:bg-night rounded-full p-2">
               <button
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                className="p-2 rounded-full text-stone-600 dark:text-stone-300 hover:bg-stone-300 dark:hover:bg-stone-700"
+                className="p-2 rounded-full text-espresso/70 dark:text-muted hover:bg-saffron/15 hover:text-saffron-deep dark:hover:text-saffron-glow transition-colors"
                 aria-label="کاهش تعداد"
               >
-                <Minus />
+                <Minus size={18} />
               </button>
-              <span className="text-xl font-bold w-8 text-center text-stone-800 dark:text-stone-100">
+              <span className="text-xl font-bold w-8 text-center text-ink dark:text-bone">
                 {quantity.toLocaleString("fa-IR")}
               </span>
               <button
                 onClick={() => setQuantity((q) => q + 1)}
-                className="p-2 rounded-full text-stone-600 dark:text-stone-300 hover:bg-stone-300 dark:hover:bg-stone-700"
+                className="p-2 rounded-full text-espresso/70 dark:text-muted hover:bg-saffron/15 hover:text-saffron-deep dark:hover:text-saffron-glow transition-colors"
                 aria-label="افزایش تعداد"
               >
-                <Plus />
+                <Plus size={18} />
               </button>
             </div>
-            {/* === CHANGE: Made font size responsive === */}
-            <p className="text-xl sm:text-2xl font-bold text-amber-700 dark:text-yellow-400">
+            <p className="text-xl sm:text-2xl font-bold text-saffron-deep dark:text-saffron-glow">
               <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                 {totalPrice.toLocaleString("fa-IR")}
               </motion.span>
               هزار تومان
             </p>
           </div>
+
           <button
             onClick={handleAddToCart}
-            className="w-full mt-8 py-3 sm:py-4 bg-amber-500 text-white font-bold text-base sm:text-lg rounded-xl hover:bg-amber-600 transition-colors"
+            className="w-full mt-8 py-3 sm:py-4 bg-saffron text-night dark:text-bone font-bold text-base sm:text-lg rounded-xl hover:bg-saffron-deep hover:text-bone transition-colors shadow-saffron"
           >
             افزودن به سفارش
           </button>

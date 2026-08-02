@@ -16,7 +16,7 @@ const BackToTopButton = () => {
       }
     };
 
-    window.addEventListener("scroll", toggleVisibility);
+    window.addEventListener("scroll", toggleVisibility, { passive: true });
 
     return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
@@ -37,10 +37,10 @@ const BackToTopButton = () => {
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.5 }}
-            whileHover={{ scale: 1.1, backgroundColor: "#f59e0b" }}
+            whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
-            className="bg-amber-500/80 dark:bg-yellow-500/80 text-white dark:text-black rounded-full p-3 shadow-lg"
-            aria-label="Go to top"
+            className="bg-saffron dark:bg-saffron-glow text-bone dark:text-night rounded-full p-3 shadow-warm-lg hover:shadow-saffron"
+            aria-label="بازگشت به بالا"
           >
             <ChevronUp size={24} />
           </motion.button>

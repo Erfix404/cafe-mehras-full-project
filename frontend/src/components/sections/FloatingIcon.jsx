@@ -19,9 +19,9 @@ const FloatingIcon = ({ Icon, pos, delay }) => (
         repeatType: "mirror",
         ease: "easeInOut",
       }}
-      className="p-3 bg-white/10 dark:bg-black/20 backdrop-blur-sm rounded-full shadow-lg border border-white/10"
+      className="p-3 bg-white/10 dark:bg-night/40 backdrop-blur-sm rounded-full shadow-lg border border-white/10"
     >
-      <Icon className="w-6 h-6 text-amber-600 dark:text-yellow-400" />
+      <Icon className="w-6 h-6 text-saffron-deep dark:text-yellow-400" />
     </motion.div>
   </motion.div>
 );

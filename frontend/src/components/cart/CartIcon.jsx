@@ -16,7 +16,7 @@ const CartIcon = () => {
         className="relative cursor-pointer"
         aria-label={`سبد خرید با ${totalItems} آیتم`}
       >
-        <ShoppingCart className="w-12 h-12 text-stone-800 dark:text-white drop-shadow-lg" />
+        <ShoppingCart className="w-12 h-12 text-ink dark:text-bone drop-shadow-lg" />
         <AnimatePresence>
           {totalItems > 0 && (
             <motion.div
@@ -28,7 +28,7 @@ const CartIcon = () => {
                 transition: { type: "spring", stiffness: 500, damping: 25 },
               }}
               exit={{ scale: 0 }}
-              className="absolute -top-2 -right-2 bg-amber-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center pointer-events-none"
+              className="absolute -top-2 -right-2 bg-saffron text-night dark:text-bone text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center pointer-events-none"
             >
               {totalItems.toLocaleString("fa-IR")}
             </motion.div>
