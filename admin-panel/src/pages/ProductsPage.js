@@ -243,7 +243,7 @@ function ProductsPage({ token, user, view, setView, logout, demo, demoData }) {
                 قبلی
               </button>
               <span>
-                {page} / {pageCount}
+                صفحه {page} از {pageCount}
               </span>
               <button
                 className="btn btn-ghost btn-sm"
