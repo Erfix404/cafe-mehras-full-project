@@ -142,3 +142,49 @@ npm run test   # بک‌اند (node:test + supertest، ۱۳ تست) + فران�
 ## 📄 لایسنس
 
 MIT — © 2026 [Erfan Ashouri (Erfix404)](https://github.com/Erfix404)
+
+---
+
+# 🌐 English
+
+**Cafe Mehras** — a full-stack café website with a Persian-luxury design: React 18 + Tailwind frontend, Express 5 + MongoDB backend, and a RTL admin panel. Monorepo with tests, CI, and auto-deploy.
+
+## ✨ Highlights
+
+- **Frontend:** React 18, Tailwind 3, framer-motion — brand design system (`bone/night/saffron`), Persian ogival arch motifs, interactive menu (58 items / 7 categories, search, syrup add-ons), full cart with fly-to-cart animation + Telegram checkout, dark/light mode, RTL + mobile-first, WCAG AA
+- **Backend:** Express 5 + Mongoose 8 — products CRUD with validation, HMAC admin auth (fail-closed: no env vars → no boot), dashboard stats, stable menu ordering, seed script
+- **Admin Panel:** React 19 RTL — login, stats dashboard, product CRUD with search/filter/pagination, **demo mode** (works without backend)
+- **CI/CD:** GitHub Actions — tests (23: 13 backend `node:test` + 10 frontend Jest), strict builds, Pages deploy (site at `/`, admin at `/admin/`)
+
+## 🚀 Quick start
+
+```bash
+npm install --prefix backend && npm install --prefix frontend && npm install --prefix admin-panel
+cd backend && cp .env.example .env   # set ADMIN_PASSWORD + ADMIN_SECRET
+npm run seed                         # 58 products
+cd .. && npm install && npm run dev  # api:5001 + web:3000 + admin:3001
+```
+
+No MongoDB? The frontend falls back to bundled mock data automatically.
+
+## 📡 API
+
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| `GET` | `/` | — | health check |
+| `GET` | `/api/products` | — | list products (sorted) |
+| `POST` | `/api/products` | ✅ | create product |
+| `PUT` | `/api/products/:id` | ✅ | update product |
+| `DELETE` | `/api/products/:id` | ✅ | delete product |
+| `POST` | `/api/auth/login` | — | admin login → HMAC token |
+| `GET` | `/api/auth/stats` | ✅ | dashboard stats |
+
+## 🧪 Tests
+
+```bash
+npm run test   # backend (node:test + supertest) + frontend (Jest)
+```
+
+## 📄 License
+
+MIT — © 2026 [Erfan Ashouri (Erfix404)](https://github.com/Erfix404)
