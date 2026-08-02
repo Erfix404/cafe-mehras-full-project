@@ -11,7 +11,8 @@ const productSchema = new mongoose.Schema(
     },
     price: {
       type: Number,
-      required: true,
+      // null = specialty item (frontend shows a Sparkles badge, hides price)
+      default: null,
     },
     category: {
       type: String,

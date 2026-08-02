@@ -490,12 +490,29 @@ const contactInfo = {
 };
 
 export const api = {
-  fetchMenuData: () =>
-    new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(menuData);
-      }, 100);
-    }),
+  fetchMenuData: async () => {
+    // Try the real backend first (Express + MongoDB on :5001)
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 4000); // 4s timeout
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL || "http://127.0.0.1:5001"}/api/products`,
+        { signal: controller.signal }
+      );
+      clearTimeout(timer);
+      if (!res.ok) throw new Error(`API ${res.status}`);
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0)
+        return data.map((p, i) => ({
+          ...p,
+          id: p.id ?? p._id ?? i + 1, // normalize _id from Mongo to id
+        }));
+      throw new Error("empty");
+    } catch (err) {
+      console.warn("⚠️ backend unavailable, using mock data:", err.message);
+      return menuData;
+    }
+  },
   fetchContactInfo: () =>
     new Promise((resolve) => setTimeout(() => resolve(contactInfo), 100)),
 };
