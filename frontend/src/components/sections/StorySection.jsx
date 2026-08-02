@@ -2,6 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Bean, Clock, MapPin, HeartHandshake } from "lucide-react";
+import { img } from "../../assets";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 32 },
@@ -18,7 +19,7 @@ const StorySection = () => {
       icon: Bean,
       title: "رست تازه",
       desc: "دانه‌هایمان هر هفته تازه رست می‌شوند؛ از مزارع کلمبیا تا اتیوپی.",
-      img: "/images/beans.jpg",
+      img: img("/images/beans.jpg"),
       span: "md:col-span-2 md:row-span-2",
       big: true,
     },
@@ -26,7 +27,7 @@ const StorySection = () => {
       icon: HeartHandshake,
       title: "داستان ما",
       desc: "از یک دانه تا یک فنجان؛ عشق به قهوه در هر مرحله.",
-      img: "/images/cafe-interior.jpg",
+      img: img("/images/cafe-interior.jpg"),
       span: "",
     },
     {

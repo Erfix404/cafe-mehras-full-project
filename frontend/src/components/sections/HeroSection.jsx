@@ -2,6 +2,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { ArrowDown, MapPin, Clock } from "lucide-react";
+import { img } from "../../assets";
 
 const heroVariants = {
   hidden: { opacity: 0, y: 24 },
@@ -126,7 +127,7 @@ const HeroSection = () => {
                 }}
               >
                 <img
-                  src="/images/hero-coffee.jpg"
+                  src={img("/images/hero-coffee.jpg")}
                   alt="فنجان قهوه تخصصی مهراس"
                   className="w-full h-[300px] sm:h-[420px] lg:h-[520px] object-cover"
                 />

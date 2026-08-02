@@ -2,14 +2,15 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Instagram } from "lucide-react";
+import { img } from "../../assets";
 
 const posts = [
-  { img: "/images/espresso.jpg", alt: "اسپرسو مهراس" },
-  { img: "/images/latte-art.jpg", alt: "لاته آرت" },
-  { img: "/images/iced-coffee.jpg", alt: "آیس قهوه" },
-  { img: "/images/pour-over.jpg", alt: "دم‌آوری" },
-  { img: "/images/dessert.jpg", alt: "دسر کافه" },
-  { img: "/images/cafe-interior.jpg", alt: "فضای کافه" },
+  { img: img("/images/espresso.jpg"), alt: "اسپرسو مهراس" },
+  { img: img("/images/latte-art.jpg"), alt: "لاته آرت" },
+  { img: img("/images/iced-coffee.jpg"), alt: "آیس قهوه" },
+  { img: img("/images/pour-over.jpg"), alt: "دم‌آوری" },
+  { img: img("/images/dessert.jpg"), alt: "دسر کافه" },
+  { img: img("/images/cafe-interior.jpg"), alt: "فضای کافه" },
 ];
 
 const InstagramSection = () => {

@@ -1,4 +1,5 @@
 // src/api/mockAPI.js
+import { img } from "../assets";
 
 const menuData = [
 {
@@ -506,11 +507,12 @@ export const api = {
         return data.map((p, i) => ({
           ...p,
           id: p.id ?? p._id ?? i + 1, // normalize _id from Mongo to id
+          image: p.image ? img(p.image) : p.image, // fix absolute /images/ paths for Pages
         }));
       throw new Error("empty");
     } catch (err) {
       console.warn("⚠️ backend unavailable, using mock data:", err.message);
-      return menuData;
+      return menuData.map((p) => ({ ...p, image: img(p.image) }));
     }
   },
   fetchContactInfo: () =>
