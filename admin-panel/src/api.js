@@ -3,6 +3,12 @@ const API =
   process.env.REACT_APP_API_URL ||
   "http://127.0.0.1:5001";
 
+export function checkBackend() {
+  return fetch(`${API}/api/products`, { signal: AbortSignal.timeout(2500) })
+    .then((r) => r.ok)
+    .catch(() => false);
+}
+
 export function login(password) {
   return fetch(`${API}/api/auth/login`, {
     method: "POST",

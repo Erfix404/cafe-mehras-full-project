@@ -8,17 +8,27 @@ import {
   Package,
   Tag,
   Sparkles,
+  Info,
 } from "lucide-react";
 
-function Dashboard({ token, user, view, setView, logout }) {
+function Dashboard({ token, user, view, setView, logout, demo, demoData }) {
   const [stats, setStats] = useState(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
+    if (demo && demoData) {
+      const cats = [...new Set(demoData.map((p) => p.category))];
+      setStats({
+        total: demoData.length,
+        categories: cats.length,
+        featured: demoData.filter((p) => p.price == null).length,
+      });
+      return;
+    }
     getStats(token)
       .then(setStats)
       .catch((e) => setError(e.message));
-  }, [token]);
+  }, [token, demo, demoData]);
 
   return (
     <div className="shell">
@@ -58,6 +68,13 @@ function Dashboard({ token, user, view, setView, logout }) {
             {user} · ادمین
           </div>
         </div>
+
+        {demo && (
+          <div className="demo-banner">
+            <Info size={16} />
+            حالت دمو — بک‌اند متصل نیست؛ داده‌ها نمونه‌ای هستند و تغییرات ذخیره نمی‌شوند.
+          </div>
+        )}
 
         {error && <div className="auth-error" style={{ marginBottom: "1rem" }}>{error}</div>}
 

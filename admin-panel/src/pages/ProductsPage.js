@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { getProducts, createProduct, updateProduct, deleteProduct } from "../api";
 import ProductModal from "../components/ProductModal";
 import { img } from "../img";
-import { Search, Plus, Pencil, Trash2, LayoutDashboard, Coffee, LogOut } from "lucide-react";
+import { Search, Plus, Pencil, Trash2, LayoutDashboard, Coffee, LogOut, Info } from "lucide-react";
 
 const IMAGES = [
   "/images/espresso.jpg",
@@ -15,7 +15,7 @@ const IMAGES = [
   "/images/syrup.jpg",
 ].map(img);
 
-function ProductsPage({ token, user, view, setView, logout }) {
+function ProductsPage({ token, user, view, setView, logout, demo, demoData }) {
   const [products, setProducts] = useState(null);
   const [query, setQuery] = useState("");
   const [cat, setCat] = useState("");
@@ -30,6 +30,12 @@ function ProductsPage({ token, user, view, setView, logout }) {
   };
 
   const load = useCallback(async () => {
+    if (demo) {
+      const data = (demoData || []).map((p) => ({ ...p, _id: String(p.id) }));
+      setProducts(data);
+      setCats([...new Set(data.map((p) => p.category))].sort());
+      return;
+    }
     try {
       const data = await getProducts(token);
       setProducts(data);
@@ -37,7 +43,7 @@ function ProductsPage({ token, user, view, setView, logout }) {
     } catch (e) {
       showToast(e.message, true);
     }
-  }, [token]);
+  }, [token, demo, demoData]);
 
   useEffect(() => {
     load();
@@ -52,6 +58,17 @@ function ProductsPage({ token, user, view, setView, logout }) {
   const imgSrc = (p) => img(p.image);
 
   const onSave = async (data, id) => {
+    if (demo) {
+      // demo: mutate local state only
+      setProducts((prev) => {
+        if (id) return prev.map((p) => (p._id === id ? { ...p, ...data, _id: id } : p));
+        const nid = String(Date.now());
+        return [{ ...data, _id: nid }, ...prev];
+      });
+      setModal(null);
+      showToast(id ? "محصول ویرایش شد ✓ (دمو)" : "محصول اضافه شد ✓ (دمو)");
+      return data;
+    }
     const saved = id
       ? await updateProduct(token, id, data)
       : await createProduct(token, data);
@@ -64,6 +81,12 @@ function ProductsPage({ token, user, view, setView, logout }) {
   const onDelete = async (p) => {
     if (!window.confirm(`«${p.name}» حذف شود؟`)) return;
     setBusyId(p._id);
+    if (demo) {
+      setProducts((prev) => prev.filter((x) => x._id !== p._id));
+      setBusyId(null);
+      showToast("محصول حذف شد (دمو)");
+      return;
+    }
     try {
       await deleteProduct(token, p._id);
       showToast("محصول حذف شد");
@@ -113,6 +136,13 @@ function ProductsPage({ token, user, view, setView, logout }) {
             {user} · ادمین
           </div>
         </div>
+
+        {demo && (
+          <div className="demo-banner" style={{ marginBottom: "1rem" }}>
+            <Info size={16} />
+            حالت دمو — بک‌اند متصل نیست؛ داده‌ها نمونه‌ای هستند و تغییرات ذخیره نمی‌شوند.
+          </div>
+        )}
 
         <div className="panel">
           <div className="panel-head">
