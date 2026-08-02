@@ -40,6 +40,12 @@ function Login({ onLogin }) {
         <button className="btn btn-primary btn-block" disabled={busy}>
           {busy ? "در حال ورود…" : "ورود به پنل"}
         </button>
+        <a
+          href={process.env.PUBLIC_URL ? process.env.PUBLIC_URL + "/../" : "/"}
+          style={{ display: "block", marginTop: "1.25rem", color: "#8a6f5f", fontSize: "0.82rem", textDecoration: "none" }}
+        >
+          ← بازگشت به سایت کافه
+        </a>
       </form>
     </div>
   );

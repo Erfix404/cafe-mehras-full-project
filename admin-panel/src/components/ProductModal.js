@@ -72,7 +72,7 @@ function ProductModal({ product, images, cats, onClose, onSave }) {
 
           <div className="field">
             <label>تصویر محصول</label>
-            <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap", marginBottom: "0.6rem" }}>
               {images.map((im) => (
                 <button
                   type="button"
@@ -89,6 +89,13 @@ function ProductModal({ product, images, cats, onClose, onSave }) {
                 </button>
               ))}
             </div>
+            <input
+              value={form.image}
+              onChange={set("image")}
+              placeholder="یا آدرس دلخواه تصویر (URL)…"
+              dir="ltr"
+              style={{ textAlign: "left" }}
+            />
           </div>
 
           <div style={{ display: "flex", gap: "0.75rem", justifyContent: "flex-start", marginTop: "1.25rem" }}>

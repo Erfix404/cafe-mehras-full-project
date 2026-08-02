@@ -23,6 +23,8 @@ function ProductsPage({ token, user, view, setView, logout, demo, demoData }) {
   const [modal, setModal] = useState(null); // null | {product} | {product:null}
   const [toast, setToast] = useState(null);
   const [busyId, setBusyId] = useState(null);
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 12;
 
   const showToast = (msg, err) => {
     setToast({ msg, err });
@@ -54,6 +56,14 @@ function ProductsPage({ token, user, view, setView, logout, demo, demoData }) {
     const okC = !cat || p.category === cat;
     return okQ && okC;
   });
+
+  // reset pagination when filters change
+  useEffect(() => {
+    setPage(1);
+  }, [query, cat]);
+
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const pageItems = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const imgSrc = (p) => img(p.image);
 
@@ -184,7 +194,7 @@ function ProductsPage({ token, user, view, setView, logout, demo, demoData }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {filtered.map((p) => (
+                  {pageItems.map((p) => (
                     <tr key={p._id}>
                       <td>
                         <div className="p-cell">
@@ -221,6 +231,27 @@ function ProductsPage({ token, user, view, setView, logout, demo, demoData }) {
                   ))}
                 </tbody>
               </table>
+            </div>
+          )}
+          {filtered.length > PAGE_SIZE && (
+            <div className="pagination">
+              <button
+                className="btn btn-ghost btn-sm"
+                disabled={page <= 1}
+                onClick={() => setPage((p) => p - 1)}
+              >
+                قبلی
+              </button>
+              <span>
+                {page} / {pageCount}
+              </span>
+              <button
+                className="btn btn-ghost btn-sm"
+                disabled={page >= pageCount}
+                onClick={() => setPage((p) => p + 1)}
+              >
+                بعدی
+              </button>
             </div>
           )}
         </div>

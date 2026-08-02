@@ -110,6 +110,39 @@ function Dashboard({ token, user, view, setView, logout, demo, demoData }) {
             <Coffee size={16} /> مدیریت محصولات
           </button>
         </div>
+
+        {demo && (
+          <div className="panel" style={{ padding: "1.5rem 2rem", marginTop: "1.25rem" }}>
+            <h3 style={{ fontFamily: "Lalezar, sans-serif", fontWeight: 400, color: "var(--night)", marginBottom: "1rem" }}>توزیع دسته‌بندی‌ها</h3>
+            {(() => {
+              const counts = demoData.reduce((acc, p) => {
+                acc[p.category] = (acc[p.category] || 0) + 1;
+                return acc;
+              }, {});
+              const total = demoData.length;
+              return Object.entries(counts)
+                .sort((a, b) => b[1] - a[1])
+                .map(([catName, n]) => (
+                  <div key={catName} style={{ marginBottom: "0.7rem" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.82rem", marginBottom: "0.3rem" }}>
+                      <span style={{ fontWeight: 700, color: "var(--espresso)" }}>{catName}</span>
+                      <span style={{ color: "#8a6f5f" }}>{n}</span>
+                    </div>
+                    <div style={{ height: 8, borderRadius: 999, background: "var(--line)", overflow: "hidden" }}>
+                      <div
+                        style={{
+                          height: "100%",
+                          width: `${(n / total) * 100}%`,
+                          background: "linear-gradient(90deg, var(--saffron-deep), var(--saffron))",
+                          borderRadius: 999,
+                        }}
+                      />
+                    </div>
+                  </div>
+                ));
+            })()}
+          </div>
+        )}
       </main>
     </div>
   );
