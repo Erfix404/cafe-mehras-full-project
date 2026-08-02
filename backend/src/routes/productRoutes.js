@@ -3,6 +3,7 @@
 const express = require("express");
 const router = express.Router();
 const Product = require("../models/Product");
+const { auth } = require("../middleware/auth");
 
 // --- GET: گرفتن تمام محصولات ---
 router.get("/", async (req, res) => {
@@ -15,8 +16,8 @@ router.get("/", async (req, res) => {
   }
 });
 
-// --- POST: افزودن یک محصول جدید ---
-router.post("/", async (req, res) => {
+// --- POST: افزودن یک محصول جدید (admin only) ---
+router.post("/", auth, async (req, res) => {
   try {
     const { name, price, category, image, description } = req.body;
     const newProduct = new Product({
@@ -34,9 +35,9 @@ router.post("/", async (req, res) => {
   }
 });
 
-// --- PUT: ویرایش یک محصول موجود ---
+// --- PUT: ویرایش یک محصول موجود (admin only) ---
 // آدرس نهایی: PUT /api/products/:id  (مثلا: /api/products/688e31fd61b2ffcc27c81719)
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   try {
     const { name, price, category, image, description } = req.body;
     const updatedProduct = { name, price, category, image, description };
@@ -60,9 +61,9 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// --- DELETE: حذف یک محصول ---
+// --- DELETE: حذف یک محصول (admin only) ---
 // آدرس نهایی: DELETE /api/products/:id
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   try {
     let product = await Product.findById(req.params.id);
 

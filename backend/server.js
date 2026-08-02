@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const productRoutes = require("./src/routes/productRoutes");
+const authRoutes = require("./src/routes/authRoutes");
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.get("/", (req, res) => {
 
 // --- API Routes ---
 app.use("/api/products", productRoutes);
+app.use("/api/auth", authRoutes);
 
 // --- Server Startup ---
 app.listen(PORT, () => {
