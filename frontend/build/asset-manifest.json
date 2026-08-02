@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.abfeb78a.css",
-    "main.js": "/static/js/main.415d0b81.js",
+    "main.css": "/static/css/main.03d354da.css",
+    "main.js": "/static/js/main.4227143c.js",
     "static/media/Lalezar-Regular.ttf": "/static/media/Lalezar-Regular.3f2b413caee066a2c419.ttf",
     "static/media/Vazirmatn-Black.ttf": "/static/media/Vazirmatn-Black.44d7dcf81d6eb49d80d6.ttf",
     "static/media/Vazirmatn-ExtraBold.ttf": "/static/media/Vazirmatn-ExtraBold.b0e2bcd67b7c098fc68f.ttf",
@@ -9,11 +9,11 @@
     "static/media/Vazirmatn-Regular.ttf": "/static/media/Vazirmatn-Regular.f08bc22d4f5bb01fb82f.ttf",
     "static/media/Vazirmatn-Medium.ttf": "/static/media/Vazirmatn-Medium.69fe579d5c984c16172d.ttf",
     "index.html": "/index.html",
-    "main.abfeb78a.css.map": "/static/css/main.abfeb78a.css.map",
-    "main.415d0b81.js.map": "/static/js/main.415d0b81.js.map"
+    "main.03d354da.css.map": "/static/css/main.03d354da.css.map",
+    "main.4227143c.js.map": "/static/js/main.4227143c.js.map"
   },
   "entrypoints": [
-    "static/css/main.abfeb78a.css",
-    "static/js/main.415d0b81.js"
+    "static/css/main.03d354da.css",
+    "static/js/main.4227143c.js"
   ]
 }

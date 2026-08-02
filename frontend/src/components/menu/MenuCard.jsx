@@ -37,7 +37,7 @@ const MenuCard = memo(({ item, onSelect }) => {
       onHoverEnd={() => setIsHovered(false)}
       onClick={() => onSelect(item)}
     >
-      <div className="relative h-full bg-bone dark:bg-night-soft rounded-3xl border border-bone-line/40 dark:border-night-line shadow-warm hover:shadow-warm-lg transition-shadow overflow-hidden">
+      <div className="relative h-full bg-bone dark:bg-night-soft rounded-3xl border border-bone-line/40 dark:border-night-line shadow-warm hover:shadow-warm-lg transition-all duration-300 hover:-translate-y-1 overflow-hidden">
         {/* === Specialty badge === */}
         {item.price === null && (
           <motion.div
@@ -59,9 +59,20 @@ const MenuCard = memo(({ item, onSelect }) => {
               alt={item.name}
               className="w-full h-52 object-cover"
               loading="lazy"
-              animate={{ scale: isHovered ? 1.06 : 1 }}
+              animate={{ scale: isHovered ? 1.08 : 1 }}
               transition={{ type: "spring", stiffness: 300, damping: 18 }}
             />
+            {/* Hover overlay — quick view hint */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: isHovered ? 1 : 0 }}
+              transition={{ duration: 0.25 }}
+              className="absolute inset-0 bg-night/50 backdrop-blur-[2px] flex items-center justify-center"
+            >
+              <span className="px-4 py-2 rounded-full bg-bone/90 dark:bg-night-soft/90 text-ink dark:text-bone text-sm font-bold shadow-warm">
+                مشاهده جزئیات
+              </span>
+            </motion.div>
           </div>
           <div className="p-4 sm:p-5 flex flex-col flex-grow">
             <motion.h3

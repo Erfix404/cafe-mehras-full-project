@@ -22,9 +22,9 @@ const HeroSection = () => {
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center py-24 lg:py-16">
-          {/* --- Copy (RTL: right column first) --- */}
-          <div className="order-2 lg:order-1 text-right">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center py-16 lg:py-24">
+          {/* --- Copy (RTL: right column first on desktop, first on mobile) --- */}
+          <div className="order-1 text-right">
             <motion.span
               custom={0}
               variants={heroVariants}
@@ -41,7 +41,7 @@ const HeroSection = () => {
               variants={heroVariants}
               initial="hidden"
               animate="visible"
-              className="mt-6 font-display text-6xl sm:text-7xl lg:text-[5.5rem] leading-[1.08] text-ink dark:text-bone tracking-tight"
+              className="mt-6 font-display text-5xl sm:text-7xl lg:text-[5.5rem] leading-[1.15] sm:leading-[1.08] text-ink dark:text-bone tracking-tight"
             >
               قهوه‌ای که با
               <br />
@@ -114,7 +114,7 @@ const HeroSection = () => {
             variants={heroVariants}
             initial="hidden"
             animate="visible"
-            className="order-1 lg:order-2 relative flex justify-center lg:justify-end"
+            className="order-2 lg:order-2 relative flex justify-center lg:justify-end"
           >
             <div className="relative w-full max-w-[520px]">
               {/* Persian arch frame — ogival arch via CSS border-radius (cross-browser, no clip-path needed) */}
@@ -128,7 +128,7 @@ const HeroSection = () => {
                 <img
                   src="/images/hero-coffee.jpg"
                   alt="فنجان قهوه تخصصی مهراس"
-                  className="w-full h-[420px] sm:h-[520px] object-cover"
+                  className="w-full h-[300px] sm:h-[420px] lg:h-[520px] object-cover"
                 />
                 {/* Warm gradient overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-night/40 via-transparent to-transparent" />
