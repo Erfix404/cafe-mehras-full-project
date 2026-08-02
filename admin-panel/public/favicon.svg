@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="cup" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2B211B"/>
+      <stop offset="100%" stop-color="#1A0F0A"/>
+    </linearGradient>
+  </defs>
+  <!-- Persian arch backdrop -->
+  <rect width="64" height="64" rx="14" fill="#FAF7F2"/>
+  <path d="M16 30 C16 14 48 14 48 30 L48 52 A4 4 0 0 1 44 56 L20 56 A4 4 0 0 1 16 52 Z" fill="url(#cup)"/>
+  <!-- steam -->
+  <path d="M26 10 C24 6 28 5 26 2" stroke="#C97B2D" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M33 10 C31 6 35 5 33 2" stroke="#C97B2D" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M40 10 C38 6 42 5 40 2" stroke="#C97B2D" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- crema -->
+  <path d="M20 26 Q32 20 44 26" stroke="#C97B2D" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- handle -->
+  <path d="M48 30 C56 30 56 42 48 42" stroke="#C97B2D" stroke-width="3" fill="none" stroke-linecap="round"/>
+</svg>

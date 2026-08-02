@@ -1,58 +1,213 @@
-import React, { useState, useEffect } from "react";
+// src/pages/ProductsPage.js — product CRUD + search + category filter
+import React, { useState, useEffect, useCallback } from "react";
+import { getProducts, createProduct, updateProduct, deleteProduct } from "../api";
+import ProductModal from "../components/ProductModal";
+import { img } from "../img";
+import { Search, Plus, Pencil, Trash2, LayoutDashboard, Coffee, LogOut } from "lucide-react";
 
-function ProductsPage() {
-  const [products, setProducts] = useState([]);
+const IMAGES = [
+  "/images/espresso.jpg",
+  "/images/latte-art.jpg",
+  "/images/iced-coffee.jpg",
+  "/images/pour-over.jpg",
+  "/images/dessert.jpg",
+  "/images/beans.jpg",
+  "/images/syrup.jpg",
+].map(img);
+
+function ProductsPage({ token, user, view, setView, logout }) {
+  const [products, setProducts] = useState(null);
+  const [query, setQuery] = useState("");
+  const [cat, setCat] = useState("");
+  const [cats, setCats] = useState([]);
+  const [modal, setModal] = useState(null); // null | {product} | {product:null}
+  const [toast, setToast] = useState(null);
+  const [busyId, setBusyId] = useState(null);
+
+  const showToast = (msg, err) => {
+    setToast({ msg, err });
+    setTimeout(() => setToast(null), 2600);
+  };
+
+  const load = useCallback(async () => {
+    try {
+      const data = await getProducts(token);
+      setProducts(data);
+      setCats([...new Set(data.map((p) => p.category))].sort());
+    } catch (e) {
+      showToast(e.message, true);
+    }
+  }, [token]);
 
   useEffect(() => {
-    // آدرس API بک‌اند برای گرفتن محصولات
-    fetch("http://localhost:5001/api/products")
-      .then((response) => response.json())
-      .then((data) => setProducts(data))
-      .catch((error) => console.error("Error fetching products:", error));
-  }, []);
+    load();
+  }, [load]);
+
+  const filtered = (products || []).filter((p) => {
+    const okQ = !query || (p.name || "").includes(query);
+    const okC = !cat || p.category === cat;
+    return okQ && okC;
+  });
+
+  const imgSrc = (p) => img(p.image);
+
+  const onSave = async (data, id) => {
+    const saved = id
+      ? await updateProduct(token, id, data)
+      : await createProduct(token, data);
+    setModal(null);
+    showToast(id ? "محصول ویرایش شد ✓" : "محصول اضافه شد ✓");
+    load();
+    return saved;
+  };
+
+  const onDelete = async (p) => {
+    if (!window.confirm(`«${p.name}» حذف شود؟`)) return;
+    setBusyId(p._id);
+    try {
+      await deleteProduct(token, p._id);
+      showToast("محصول حذف شد");
+      load();
+    } catch (e) {
+      showToast(e.message, true);
+    } finally {
+      setBusyId(null);
+    }
+  };
 
   return (
-    <div style={{ padding: "20px", maxWidth: "1000px", margin: "0 auto" }}>
-      <h1>مدیریت محصولات</h1>
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
-        <thead>
-          <tr style={{ backgroundColor: "#f2f2f2" }}>
-            <th style={tableHeaderStyle}>نام محصول</th>
-            <th style={tableHeaderStyle}>دسته بندی</th>
-            <th style={tableHeaderStyle}>قیمت</th>
-            <th style={tableHeaderStyle}>عملیات</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map((product) => (
-            <tr key={product._id} style={{ borderBottom: "1px solid #ddd" }}>
-              <td style={tableCellStyle}>{product.name}</td>
-              <td style={tableCellStyle}>{product.category}</td>
-              <td style={tableCellStyle}>
-                {product.price.toLocaleString()} تومان
-              </td>
-              <td style={tableCellStyle}>
-                <button>ویرایش</button>
-                <button style={{ marginRight: "5px" }}>حذف</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="shell">
+      <aside className="sidebar">
+        <div className="brand">
+          <div className="arch">☕</div>
+          <div>
+            <b>کافه مهراس</b>
+            <small>پنل مدیریت</small>
+          </div>
+        </div>
+        <button
+          className={`nav-item ${view === "dashboard" ? "active" : ""}`}
+          onClick={() => setView("dashboard")}
+        >
+          <LayoutDashboard size={18} />
+          <span>داشبورد</span>
+        </button>
+        <button
+          className={`nav-item ${view === "products" ? "active" : ""}`}
+          onClick={() => setView("products")}
+        >
+          <Coffee size={18} />
+          <span>محصولات</span>
+        </button>
+        <button className="nav-item logout" onClick={logout}>
+          <LogOut size={18} />
+          <span>خروج</span>
+        </button>
+      </aside>
+
+      <main className="main">
+        <div className="topbar">
+          <h2>محصولات</h2>
+          <div className="user">
+            <span className="dot" />
+            {user} · ادمین
+          </div>
+        </div>
+
+        <div className="panel">
+          <div className="panel-head">
+            <div className="search">
+              <Search />
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="جستجوی محصول…"
+              />
+            </div>
+            <select value={cat} onChange={(e) => setCat(e.target.value)}>
+              <option value="">همه دسته‌ها</option>
+              {cats.map((c) => (
+                <option key={c} value={c}>{c}</option>
+              ))}
+            </select>
+            <button className="btn btn-primary" onClick={() => setModal({ product: null })}>
+              <Plus size={16} /> محصول جدید
+            </button>
+          </div>
+
+          {products === null ? (
+            <div className="loading"><span className="spinner" /> در حال بارگذاری…</div>
+          ) : filtered.length === 0 ? (
+            <div className="empty">
+              <div className="big">☕</div>
+              محصولی پیدا نشد
+            </div>
+          ) : (
+            <div className="table-wrap">
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>محصول</th>
+                    <th>دسته</th>
+                    <th>قیمت</th>
+                    <th>عملیات</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filtered.map((p) => (
+                    <tr key={p._id}>
+                      <td>
+                        <div className="p-cell">
+                          <img src={imgSrc(p)} alt={p.name} onError={(e) => { e.target.style.display = "none"; }} />
+                          <div>
+                            <div className="p-name">{p.name}</div>
+                            {p.description && <div className="p-desc">{p.description}</div>}
+                          </div>
+                        </div>
+                      </td>
+                      <td><span className="badge">{p.category}</span></td>
+                      <td>
+                        {p.price != null ? (
+                          <span className="price">{p.price.toLocaleString("fa-IR")} <small>تومان</small></span>
+                        ) : (
+                          <span className="badge badge-special">ویژه</span>
+                        )}
+                      </td>
+                      <td>
+                        <div className="actions">
+                          <button className="btn btn-ghost btn-sm" onClick={() => setModal({ product: p })}>
+                            <Pencil size={14} />
+                          </button>
+                          <button
+                            className="btn btn-danger btn-sm"
+                            onClick={() => onDelete(p)}
+                            disabled={busyId === p._id}
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </main>
+
+      {modal && (
+        <ProductModal
+          product={modal.product}
+          images={IMAGES}
+          cats={cats}
+          onClose={() => setModal(null)}
+          onSave={onSave}
+        />
+      )}
+      {toast && <div className={`toast ${toast.err ? "err" : ""}`}>{toast.msg}</div>}
     </div>
   );
 }
-
-// استایل‌های ساده برای جدول
-const tableHeaderStyle = {
-  padding: "12px",
-  textAlign: "right",
-  borderBottom: "2px solid #ddd",
-};
-
-const tableCellStyle = {
-  padding: "12px",
-  textAlign: "right",
-};
 
 export default ProductsPage;
