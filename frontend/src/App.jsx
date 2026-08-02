@@ -7,7 +7,9 @@ import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import BackToTopButton from "./components/ui/BackToTopButton";
 import HeroSection from "./components/sections/HeroSection";
+import StorySection from "./components/sections/StorySection";
 import MenuSection from "./components/sections/MenuSection";
+import InstagramSection from "./components/sections/InstagramSection";
 import CartIcon from "./components/cart/CartIcon";
 import FlyingCartItems from "./components/cart/FlyingCartItems";
 import CartModal from "./components/cart/CartModal";
@@ -39,7 +41,9 @@ function App() {
             {/* We return to the simple and robust main layout */}
             <main>
               <HeroSection />
+              <StorySection />
               <MenuSection />
+              <InstagramSection />
             </main>
             <Footer />
 

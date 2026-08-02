@@ -41,11 +41,19 @@ const HeroSection = () => {
               variants={heroVariants}
               initial="hidden"
               animate="visible"
-              className="mt-6 font-display text-6xl sm:text-7xl lg:text-8xl leading-[1.1] text-ink dark:text-bone"
+              className="mt-6 font-display text-6xl sm:text-7xl lg:text-[5.5rem] leading-[1.08] text-ink dark:text-bone tracking-tight"
             >
               قهوه‌ای که با
               <br />
-              <span className="text-saffron dark:text-saffron-glow">قاب ایرانی</span>
+              <span className="relative inline-block text-saffron dark:text-saffron-glow">
+                قاب ایرانی
+                <motion.span
+                  className="absolute -bottom-2 right-0 left-0 h-[3px] rounded-full bg-saffron/40 dark:bg-saffron-glow/40 origin-right"
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ delay: 0.9, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                />
+              </span>
               {" "}سرو می‌شود
             </motion.h1>
 
