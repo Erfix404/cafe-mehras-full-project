@@ -1,0 +1,28 @@
+{
+  "name": "cafe-mehras-full-project",
+  "version": "1.1.0",
+  "private": true,
+  "description": "کافه مهراس — full-stack café website: React + Tailwind frontend, Express + MongoDB backend, admin panel",
+  "scripts": {
+    "dev": "concurrently -n api,web,admin -c yellow,cyan,magenta \"npm --prefix backend start\" \"npm --prefix frontend start\" \"npm --prefix admin-panel start\"",
+    "test": "npm --prefix backend test && CI=true npm --prefix frontend test -- --watchAll=false",
+    "build": "npm --prefix frontend run build && npm --prefix admin-panel run build",
+    "seed": "npm --prefix backend run seed"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  },
+  "keywords": [
+    "react",
+    "express",
+    "mongodb",
+    "tailwindcss",
+    "framer-motion",
+    "admin-panel",
+    "cafe",
+    "restaurant",
+    "persian",
+    "rtl"
+  ],
+  "license": "MIT"
+}

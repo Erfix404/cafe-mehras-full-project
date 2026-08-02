@@ -1,27 +1,27 @@
-# Getting Started with Create React App
+# پنل مدیریت کافه مهراس
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+پنل مدیریت منوی کافه مهراس — React 19 + RTL، با طراحی برند (bone/night/saffron + قوس ایرانی).
 
-## پنل مدیریت کافه مهراس
+**Live:** https://erfix404.github.io/cafe-mehras-full-project/admin/
 
-پنل مدیریت منوی کافه مهراس — React 19.
+## امکانات
 
-- ورود با رمز عبور (پیش‌فرض: `mehras2024` — از `backend/.env` قابل تغییر)
-- داشبورد آمار (تعداد محصول، دسته‌بندی، ویژه)
-- مدیریت کامل محصولات: افزودن / ویرایش / حذف
-- جستجو و فیلتر دسته‌بندی
-- انتخاب تصویر از گالری محصولات
-- طراحی برند مهراس (bone/night/saffron + قوس ایرانی)
+- **لاگین ادمین** — رمز از `backend/.env` (`ADMIN_PASSWORD`)؛ بدون env، سرور استارت نمی‌شود (fail-closed)
+- **داشبورد** — آمار (تعداد محصول، دسته‌بندی، ویژه) + نمودار توزیع دسته‌بندی‌ها
+- **CRUD محصولات** — افزودن / ویرایش / حذف با validation
+- **جستجو + فیلتر دسته + صفحه‌بندی** (۱۲ در هر صفحه)
+- **انتخاب تصویر** — گالری یا URL دلخواه (پیش‌نمایش زنده)
+- **حالت دمو** — بدون بک‌اند هم کار می‌کند (داده نمونه + بنر هشدار)
 
 ## اجرا
 
 ```bash
 npm install
-npm start   # http://localhost:3000
+npm start   # http://localhost:3001
 ```
 
-بک‌اند باید روی `http://127.0.0.1:5001` بالا باشد (با `ADMIN_PASSWORD` در `backend/.env`).
+بک‌اند باید روی `http://127.0.0.1:5001` بالا باشد (یا `REACT_APP_API_URL` را ست کن). اگر در دسترس نبود، پنل خودکار وارد حالت دمو می‌شود.
 
 ## دیپلوی
 
-به همراه فرانت‌اند در GitHub Actions ساخته و در `/cafe-mehras-full-project/admin/` منتشر می‌شود.
+در GitHub Actions همراه فرانت‌اند ساخته و در `/cafe-mehras-full-project/admin/` منتشر می‌شود. `PUBLIC_URL=./` در `.env.production` مسیرهای نسبی را تضمین می‌کند (تصاویر از `/images/` سمت سایت لود می‌شوند).

@@ -19,13 +19,12 @@ const CART_ACTIONS = {
 
 const CartContext = createContext(null);
 
-const initialCartState = {
+export const initialCartState = {
   cartItems: [],
   isCartOpen: false,
 };
 
-// The reducer function handles all state changes for the cart
-function cartReducer(state, action) {
+export function cartReducer(state, action) {
   switch (action.type) {
     case CART_ACTIONS.SET_FROM_STORAGE:
       return { ...state, cartItems: action.payload };

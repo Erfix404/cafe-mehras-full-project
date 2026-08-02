@@ -24,7 +24,8 @@ const productSchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      required: true,
+      // empty descriptions allowed (admin form leaves it blank)
+      default: "",
     },
     sortOrder: {
       type: Number,

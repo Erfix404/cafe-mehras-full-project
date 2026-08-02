@@ -11,13 +11,22 @@ node_modules/
 frontend/build/
 admin-panel/build/
 
+# Tests / coverage
+coverage/
+*.test.js.snap
+
 # Logs
 *.log
 npm-debug.log*
 
 # OS
 .DS_Store
+Thumbs.db
 
 # Editors
 .vscode/
 .idea/
+
+# Misc
+*.orig
+*.swp
