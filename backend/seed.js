@@ -29,6 +29,7 @@ if (!Array.isArray(menuData) || menuData.length === 0) {
 }
 
 const Product = require("./src/models/Product");
+const Coupon = require("./src/models/Coupon");
 
 (async () => {
   try {
@@ -39,15 +40,28 @@ const Product = require("./src/models/Product");
     const docs = menuData.map((p, i) => ({
       name: p.name,
       price: p.price ?? null,
+      oldPrice: p.oldPrice ?? null,
       category: p.category,
       image: p.image,
       description: p.description || "",
+      badges: p.badges || [],
+      popularity: p.popularity || 0,
+      rating: p.rating || 0,
+      stock: p.stock != null ? p.stock : 100,
       sortOrder: i,
     }));
     await Product.insertMany(docs);
 
     const count = await Product.countDocuments();
     console.log(`✅ Seeded ${count} products.`);
+
+    // --- demo coupons ---
+    await Coupon.deleteMany({});
+    await Coupon.insertMany([
+      { code: "MEHRAS10", percent: 10, label: "تخفیف ۱۰٪ کافه مهراس" },
+      { code: "WELCOME20", percent: 20, label: "تخفیف ۲۰٪ مهمان ویژه" },
+    ]);
+    console.log("✅ Seeded 2 coupons: MEHRAS10 (10%), WELCOME20 (20%)");
     process.exit(0);
   } catch (err) {
     console.error("❌ Seed failed:", err.message);

@@ -24,6 +24,18 @@ require.cache[require.resolve("../src/models/Product")] = {
   exports: MockProduct,
 };
 
+// Mock Coupon model before requiring couponRoutes
+const MockCoupon = {
+  findOne: async () => null,
+  findById: async () => null,
+  findByIdAndDelete: async () => null,
+  find: () => ({ sort: () => [] }),
+  create: async (data) => data,
+};
+require.cache[require.resolve("../src/models/Coupon")] = {
+  exports: MockCoupon,
+};
+
 const request = require("supertest");
 const app = require("../app");
 const { sign } = require("../src/middleware/auth");
@@ -122,6 +134,40 @@ describe("GET /api/auth/stats (protected)", () => {
     const res = await request(app).get("/api/auth/stats").set("x-admin-token", token);
     assert.equal(res.status, 200);
     assert.equal(typeof res.body.total, "number");
+  });
+});
+
+describe("GET /api/coupons/:code", () => {
+  test("no active coupon → 404", async () => {
+    const res = await request(app).get("/api/coupons/MEHRAS10");
+    assert.equal(res.status, 404);
+  });
+});
+
+describe("POST /api/coupons (auth required)", () => {
+  test("rejects without token → 401", async () => {
+    const res = await request(app)
+      .post("/api/coupons")
+      .send({ code: "X", percent: 10 });
+    assert.equal(res.status, 401);
+  });
+
+  test("rejects invalid percent → 400", async () => {
+    const token = sign("admin");
+    const res = await request(app)
+      .post("/api/coupons")
+      .set("x-admin-token", token)
+      .send({ code: "X", percent: 150 });
+    assert.equal(res.status, 400);
+  });
+
+  test("creates with valid body → 201", async () => {
+    const token = sign("admin");
+    const res = await request(app)
+      .post("/api/coupons")
+      .set("x-admin-token", token)
+      .send({ code: "MEHRAS10", percent: 10, label: "کد کافه" });
+    assert.equal(res.status, 201);
   });
 });
 

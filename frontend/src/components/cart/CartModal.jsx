@@ -1,8 +1,8 @@
 // src/components/cart/CartModal.jsx
 import React, { useRef, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Plus, Minus, Trash2, ShoppingCart, Send } from "lucide-react";
-import { useCart } from "../../context/CartContext";
+import { X, Plus, Minus, Trash2, ShoppingCart, Send, Ticket, Check } from "lucide-react";
+import { useCart, linePrice, discountOf } from "../../context/CartContext";
 import useBodyScrollLock from "../../hooks/useBodyScrollLock";
 import useFocusTrap from "../../hooks/useFocusTrap";
 import contactInfo from "../../api/contact";
@@ -15,10 +15,17 @@ const CartModal = () => {
     removeFromCart,
     updateQuantity,
     totalPrice,
+    discountTotal,
+    coupon,
+    couponDiscount,
+    couponError,
+    applyCoupon,
+    removeCoupon,
     clearCart,
   } = useCart();
   const modalRef = useRef(null);
   const [confirming, setConfirming] = useState(false);
+  const [couponInput, setCouponInput] = useState("");
 
   // Custom hooks for advanced functionality
   useBodyScrollLock(isCartOpen);
@@ -40,14 +47,16 @@ const CartModal = () => {
     const lines = cartItems.map(
       (item, i) =>
         `${i + 1}. ${item.name} × ${item.quantity} — ${(
-          item.price * item.quantity
+          linePrice(item) * item.quantity
         ).toLocaleString("fa-IR")} هزار تومان`
     );
-    return [
-      "☕ سفارش جدید از سایت کافه مهراس",
-      ...lines,
-      `— مجموع: ${totalPrice.toLocaleString("fa-IR")} هزار تومان`,
-    ].join("\n");
+    const summary = [];
+    if (discountTotal > 0)
+      summary.push(`— تخفیف پرفروش: -${discountTotal.toLocaleString("fa-IR")} هزار تومان`);
+    if (coupon)
+      summary.push(`— تخفیف کوپن (${coupon.code}): -${couponDiscount.toLocaleString("fa-IR")} هزار تومان`);
+    summary.push(`— مجموع نهایی: ${totalPrice.toLocaleString("fa-IR")} هزار تومان`);
+    return ["☕ سفارش جدید از سایت کافه مهراس", ...lines, ...summary].join("\n");
   };
 
   const handleCheckout = () => {
@@ -173,8 +182,13 @@ const CartModal = () => {
                           <h3 className="font-bold text-ink dark:text-bone">
                             {item.name}
                           </h3>
+                          {discountOf(item) > 0 && (
+                            <p className="text-xs text-espresso/50 dark:text-muted line-through">
+                              {item.price.toLocaleString("fa-IR")} هزار تومان
+                            </p>
+                          )}
                           <p className="text-sm text-saffron-deep dark:text-saffron-glow">
-                            {item.price.toLocaleString("fa-IR")} هزار تومان
+                            {linePrice(item).toLocaleString("fa-IR")} هزار تومان
                           </p>
                         </div>
                         <div className="flex items-center gap-2 bg-bone-strong/70 dark:bg-night rounded-full p-1">
@@ -220,9 +234,63 @@ const CartModal = () => {
             {/* Modal Footer */}
             {cartItems.length > 0 && !confirming && (
               <div className="p-6 border-t border-bone-line dark:border-night-line bg-bone/60 dark:bg-night/40">
+                {/* ── Coupon ── */}
+                <div className="mb-4">
+                  {coupon ? (
+                    <div className="flex items-center justify-between bg-saffron/10 border border-saffron/40 rounded-xl px-4 py-3">
+                      <span className="flex items-center gap-2 text-sm font-bold text-saffron-deep dark:text-saffron-glow">
+                        <Check size={16} />
+                        {coupon.label}
+                      </span>
+                      <button
+                        onClick={removeCoupon}
+                        className="text-xs text-espresso/60 dark:text-muted hover:text-saffron-deep underline"
+                      >
+                        حذف
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex gap-2">
+                      <div className="relative flex-grow">
+                        <Ticket size={16} className="absolute top-1/2 right-3 -translate-y-1/2 text-saffron" />
+                        <input
+                          type="text"
+                          value={couponInput}
+                          onChange={(e) => setCouponInput(e.target.value)}
+                          placeholder="کد تخفیف (مثلاً MEHRAS10)"
+                          className="w-full pr-10 pl-3 py-2.5 rounded-xl bg-bone-strong/60 dark:bg-night border border-bone-line/50 dark:border-night-line text-sm placeholder:text-espresso/40 focus:ring-2 focus:ring-saffron focus:outline-none"
+                          onKeyDown={(e) => e.key === "Enter" && applyCoupon(couponInput)}
+                        />
+                      </div>
+                      <button
+                        onClick={() => applyCoupon(couponInput)}
+                        className="px-4 py-2.5 rounded-xl bg-espresso/10 dark:bg-night text-ink dark:text-bone text-sm font-bold hover:bg-espresso/20 transition-colors"
+                      >
+                        اعمال
+                      </button>
+                    </div>
+                  )}
+                  {couponError && (
+                    <p className="mt-2 text-xs font-bold text-red-500">{couponError}</p>
+                  )}
+                </div>
+
+                {/* ── Totals ── */}
+                {discountTotal > 0 && (
+                  <div className="flex justify-between items-center mb-1 text-sm text-espresso/60 dark:text-muted">
+                    <span>تخفیف پرفروش:</span>
+                    <span>-{discountTotal.toLocaleString("fa-IR")} هزار</span>
+                  </div>
+                )}
+                {coupon && (
+                  <div className="flex justify-between items-center mb-1 text-sm text-espresso/60 dark:text-muted">
+                    <span>تخفیف کوپن ({coupon.code}):</span>
+                    <span>-{couponDiscount.toLocaleString("fa-IR")} هزار</span>
+                  </div>
+                )}
                 <div className="flex justify-between items-center mb-4">
                   <span className="text-lg font-medium text-espresso/70 dark:text-muted">
-                    مبلغ کل:
+                    مبلغ نهایی:
                   </span>
                   <span className="font-display text-2xl text-ink dark:text-bone">
                     {totalPrice.toLocaleString("fa-IR")} هزار تومان

@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const productRoutes = require("./src/routes/productRoutes");
 const authRoutes = require("./src/routes/authRoutes");
+const couponRoutes = require("./src/routes/couponRoutes");
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/products", productRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/coupons", couponRoutes);
 
 // 404 + error handler
 app.use((req, res) => res.status(404).json({ msg: "مسیر یافت نشد" }));

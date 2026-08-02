@@ -19,6 +19,25 @@ const CART_ACTIONS = {
 
 const CartContext = createContext(null);
 
+// Bestseller promo — must mirror MenuCard discount for consistent pricing.
+export const BESTSELLER_DISCOUNT = 0.2;
+
+// Store coupon codes → { pct, label }. Codes in the demo are fixed;
+// a real backend would validate against a coupon table instead.
+const COUPONS = {
+  MEHRAS10: { pct: 0.1, label: "فقط ۱۰٪ (کد کافه)" },
+  WELCOME20: { pct: 0.2, label: "۲۰٪ مهمان ویژه" },
+};
+
+export const discountOf = (item) =>
+  item.label === "پرفروش" && item.price != null
+    ? Math.round(item.price * BESTSELLER_DISCOUNT)
+    : 0;
+
+// Discounted line price of an item (bestseller discount applied on top of raw price).
+export const linePrice = (item) =>
+  item.price != null ? item.price - discountOf(item) : 0;
+
 export const initialCartState = {
   cartItems: [],
   isCartOpen: false,
@@ -87,6 +106,11 @@ export function cartReducer(state, action) {
 export const CartProvider = ({ children }) => {
   const [state, dispatch] = useReducer(cartReducer, initialCartState);
   const [flyingItems, setFlyingItems] = useState([]);
+  // coupon state: applied code + validation result
+  const [coupon, setCoupon] = useState(() =>
+    JSON.parse(localStorage.getItem("coupon") || "null")
+  );
+  const [couponError, setCouponError] = useState(null);
 
   // Load cart from localStorage on initial render
   useEffect(() => {
@@ -135,15 +159,41 @@ export const CartProvider = ({ children }) => {
     setFlyingItems((prev) => prev.filter((i) => i.instanceId !== instanceId));
   };
 
-  // --- Calculated Values ---
+  // ── Coupon helpers ──
+  const applyCoupon = (code) => {
+    const key = String(code || "").trim().toUpperCase();
+    const found = COUPONS[key];
+    if (!found) {
+      setCouponError("کد تخفیف معتبر نیست");
+      return false;
+    }
+    setCoupon({ code: key, pct: found.pct, label: found.label });
+    setCouponError(null);
+    localStorage.setItem("coupon", JSON.stringify({ code: key, pct: found.pct, label: found.label }));
+    return true;
+  };
+  const removeCoupon = () => {
+    setCoupon(null);
+    setCouponError(null);
+    localStorage.removeItem("coupon");
+  };
+
+  // --- Calculated Values (bestseller discount + coupon applied) ---
   const totalItems = state.cartItems.reduce(
     (sum, item) => sum + item.quantity,
     0
   );
-  const totalPrice = state.cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+  const discountTotal = state.cartItems.reduce(
+    (sum, item) => sum + discountOf(item) * item.quantity,
     0
   );
+  // subtotal after product-level (bestseller) discount
+  const subtotal = state.cartItems.reduce(
+    (sum, item) => sum + linePrice(item) * item.quantity,
+    0
+  );
+  const couponDiscount = coupon ? Math.round(subtotal * coupon.pct) : 0;
+  const totalPrice = subtotal - couponDiscount;
 
   const value = {
     ...state,
@@ -153,6 +203,13 @@ export const CartProvider = ({ children }) => {
     clearCart,
     totalItems,
     totalPrice,
+    discountTotal,
+    subtotal,
+    coupon,
+    couponDiscount,
+    couponError,
+    applyCoupon,
+    removeCoupon,
     flyingItems,
     removeFlyingItem,
     setIsCartOpen,

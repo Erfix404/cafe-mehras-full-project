@@ -1,11 +1,26 @@
 // src/components/sections/MenuSection.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Coffee } from "lucide-react";
+import {
+  Search,
+  Coffee,
+  SlidersHorizontal,
+  X,
+  Scale,
+} from "lucide-react";
 import { api } from "../../api/mockAPI";
 import MenuCard from "../menu/MenuCard";
 import MenuModal from "../menu/MenuModal";
 import SkeletonCard from "../menu/SkeletonCard";
+import CompareModal from "../menu/CompareModal";
+
+const SORTS = {
+  default: "پیشنهاد کافه",
+  popular: "محبوب‌ترین",
+  newest: "جدیدترین",
+  price_asc: "ارزان‌ترین",
+  price_desc: "گران‌ترین",
+};
 
 const MenuSection = () => {
   const [menu, setMenu] = useState([]);
@@ -14,7 +29,14 @@ const MenuSection = () => {
   const [categories, setCategories] = useState([]);
   const [activeCategory, setActiveCategory] = useState("همه");
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedBy, setSelectedBy] = useState("default");
+  const [onlyInStock, setOnlyInStock] = useState(false);
+  const [onlyDiscounted, setOnlyDiscounted] = useState(false);
+  const [priceRange, setPriceRange] = useState([0, 200]);
   const [selectedItem, setSelectedItem] = useState(null);
+  // compare tray
+  const [compareIds, setCompareIds] = useState([]);
+  const [showCompare, setShowCompare] = useState(false);
 
   useEffect(() => {
     const getMenu = async () => {
@@ -35,12 +57,56 @@ const MenuSection = () => {
   }, []);
 
   const syrups = menu.filter((item) => item.category === "سیروپ");
-  const safeCategory = categories.includes(activeCategory)
-    ? activeCategory
-    : "همه";
-  const filteredItems = menu
-    .filter((item) => safeCategory === "همه" || item.category === safeCategory)
-    .filter((item) => item.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  const safeCategory = categories.includes(activeCategory) ? activeCategory : "همه";
+
+  const priced = menu.filter((m) => m.price != null);
+  const maxPrice = priced.length ? Math.max(...priced.map((m) => m.price)) : 200;
+
+  const filteredItems = useMemo(() => {
+    let items = menu.filter(
+      (item) => safeCategory === "همه" || item.category === safeCategory
+    );
+    if (searchTerm.trim())
+      items = items.filter((item) =>
+        item.name.toLowerCase().includes(searchTerm.trim().toLowerCase())
+      );
+    if (onlyInStock) items = items.filter((i) => !i.soldOut);
+    if (onlyDiscounted) items = items.filter((i) => i.label === "پرفروش");
+    items = items.filter(
+      (i) => i.price == null || (i.price >= priceRange[0] && i.price <= priceRange[1])
+    );
+
+    switch (selectedBy) {
+      case "popular":
+        items = [...items].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+        break;
+      case "newest":
+        items = [...items].sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        break;
+      case "price_asc":
+        items = [...items].sort((a, b) => (a.price ?? 1e9) - (b.price ?? 1e9));
+        break;
+      case "price_desc":
+        items = [...items].sort((a, b) => (b.price ?? -1) - (a.price ?? -1));
+        break;
+      default:
+        items = [...items].sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
+    }
+    return items;
+  }, [menu, safeCategory, searchTerm, onlyInStock, onlyDiscounted, priceRange, selectedBy]);
+
+  const toggleCompare = (id) => {
+    setCompareIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  };
+
+  const compareItems = compareIds
+    .map((id) => menu.find((m) => m.id === id))
+    .filter(Boolean);
+  const compareItemsLength = compareItems.length;
 
   return (
     <section id="menu" className="relative py-24 sm:py-32 bg-bone dark:bg-night">
@@ -64,8 +130,9 @@ const MenuSection = () => {
           هر آیتم با دانه‌های تازه و عشق تهیه می‌شود
         </motion.p>
 
-        <div className="flex flex-col md:flex-row gap-4 justify-center mb-12">
-          <div className="relative flex-grow md:flex-grow-0 md:min-w-[320px]">
+        {/* ── search + categories ── */}
+        <div className="flex flex-col gap-4 mb-8">
+          <div className="relative flex-grow md:min-w-[320px]">
             <Search className="absolute top-1/2 right-4 -translate-y-1/2 w-5 h-5 text-espresso/40 dark:text-muted pointer-events-none" />
             <input
               type="text"
@@ -75,7 +142,8 @@ const MenuSection = () => {
               className="w-full pr-12 pl-4 py-3.5 bg-bone-strong/60 dark:bg-night-soft rounded-full shadow-warm border border-bone-line/50 dark:border-night-line focus:ring-2 focus:ring-saffron focus:outline-none transition-all text-ink dark:text-bone placeholder:text-espresso/40 dark:placeholder:text-muted/60"
             />
           </div>
-          <div className="flex space-x-2 rtl:space-x-reverse bg-bone-strong/60 dark:bg-night-soft rounded-full p-1.5 shadow-warm border border-bone-line/50 dark:border-night-line overflow-x-auto no-scrollbar">
+
+          <div className="flex items-center gap-2 bg-bone-strong/60 dark:bg-night-soft rounded-full p-1.5 shadow-card border border-bone-line/50 dark:border-night-line overflow-x-auto no-scrollbar">
             {categories.map((category) => (
               <button
                 key={category}
@@ -97,6 +165,54 @@ const MenuSection = () => {
               </button>
             ))}
           </div>
+
+          {/* filter/sort row */}
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
+            <label className="flex items-center gap-2 text-sm font-bold text-espresso/70 dark:text-muted">
+              <SlidersHorizontal size={14} className="text-saffron" />
+              مرتب‌سازی:
+              <select
+                value={selectedBy}
+                onChange={(e) => setSelectedBy(e.target.value)}
+                className="rounded-full px-3 py-2 bg-bone-strong/60 dark:bg-night-soft border border-bone-line/50 dark:border-night-line text-ink dark:text-bone focus:ring-2 focus:ring-saffron focus:outline-none"
+              >
+                {Object.entries(SORTS).map(([val, label]) => (
+                  <option key={val} value={val}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <FilterToggle
+              checked={onlyInStock}
+              onChange={setOnlyInStock}
+              label="فقط موجود"
+            />
+            <FilterToggle
+              checked={onlyDiscounted}
+              onChange={setOnlyDiscounted}
+              label="فقط تخفیف‌دار"
+            />
+
+            <label className="flex items-center gap-2 text-sm font-medium text-espresso/70 dark:text-muted">
+              <SlidersHorizontal size={14} className="text-saffron" />
+              قیمت تا:
+              <span className="font-black text-saffron-deep dark:text-saffron-glow w-16 text-center">
+                {priceRange[1]} <span className="text-[10px]">هزار</span>
+              </span>
+              <input
+                type="range"
+                min={0}
+                max={maxPrice}
+                step={5}
+                value={priceRange[1]}
+                onChange={(e) => setPriceRange([0, Number(e.target.value)])}
+                className="accent-saffron w-28"
+                aria-label="حداکثر قیمت"
+              />
+            </label>
+          </div>
         </div>
 
         {isLoading ? (
@@ -106,26 +222,19 @@ const MenuSection = () => {
             ))}
           </div>
         ) : error ? (
-          <div className="flex flex-col items-center justify-center py-16 text-center">
-            <Coffee className="w-12 h-12 text-saffron mb-4" />
-            <p className="text-red-500 font-bold mb-2">خطا در بارگذاری منو</p>
-            <p className="text-espresso/60 dark:text-muted mb-6">{error}</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="px-6 py-3 rounded-full bg-saffron text-bone font-bold hover:bg-saffron-deep transition-colors"
-            >
-              تلاش دوباره
-            </button>
-          </div>
+          <ErrorState error={error} />
         ) : (
-          <motion.div
-            layout
-            className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8"
-          >
+          <motion.div layout className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8">
             <AnimatePresence>
               {filteredItems.length > 0 ? (
                 filteredItems.map((item) => (
-                  <MenuCard key={item.id} item={item} onSelect={setSelectedItem} />
+                  <MenuCard
+                    key={item.id}
+                    item={item}
+                    onSelect={setSelectedItem}
+                    selected={compareIds.includes(item.id)}
+                    onToggleCompare={toggleCompare}
+                  />
                 ))
               ) : (
                 <motion.div
@@ -138,7 +247,7 @@ const MenuSection = () => {
                     چیزی پیدا نشد
                   </p>
                   <p className="text-espresso/60 dark:text-muted">
-                    عبارت دیگری را جستجو کنید یا دسته دیگری را انتخاب کنید
+                    عبارت دیگری را جستجو کنید یا فیلترها را تغییر دهید
                   </p>
                 </motion.div>
               )}
@@ -146,6 +255,51 @@ const MenuSection = () => {
           </motion.div>
         )}
       </div>
+
+      {/* compare tray */}
+      <AnimatePresence>
+        {compareItemsLength > 0 && !showCompare && (
+          <motion.div
+            initial={{ y: 80, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 80, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="fixed bottom-6 inset-x-0 z-40 flex justify-center px-4"
+          >
+            <div className="flex items-center gap-3 bg-night/95 dark:bg-night-soft border border-saffron/40 text-bone rounded-full pl-5 pr-3 py-3 shadow-warm-lg backdrop-blur">
+              <Scale size={18} className="text-saffron" />
+              <span className="text-sm font-bold">
+                {compareItemsLength} محصول انتخاب شد
+              </span>
+              <button
+                onClick={() => setShowCompare(true)}
+                className="px-4 py-2 rounded-full bg-saffron text-bone font-bold text-sm hover:bg-saffron-deep transition-colors"
+              >
+                مقایسه
+              </button>
+              <button
+                onClick={() => setCompareIds([])}
+                aria-label="حذف مقایسه"
+                className="p-2 rounded-full hover:bg-bone/10"
+              >
+                <X size={16} />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* compare modal */}
+      <AnimatePresence>
+        {showCompare && (
+          <CompareModal
+            items={compareItems}
+            onClose={() => setShowCompare(false)}
+            maxPrice={maxPrice}
+          />
+        )}
+      </AnimatePresence>
+
       <AnimatePresence>
         {selectedItem && (
           <MenuModal
@@ -158,5 +312,32 @@ const MenuSection = () => {
     </section>
   );
 };
+
+// ── presentational subsets ──
+const FilterToggle = ({ checked, onChange, label }) => (
+  <label className="flex items-center gap-2 text-sm font-bold text-espresso/70 dark:text-muted cursor-pointer">
+    <input
+      type="checkbox"
+      checked={checked}
+      onChange={(e) => onChange(e.target.checked)}
+      className="accent-saffron w-4 h-4"
+    />
+    {label}
+  </label>
+);
+
+const ErrorState = ({ error }) => (
+  <div className="flex flex-col items-center justify-center py-16 text-center">
+    <Coffee className="w-12 h-12 text-saffron mb-4" />
+    <p className="text-red-500 font-bold mb-2">خطا در بارگذاری منو</p>
+    <p className="text-espresso/60 dark:text-muted mb-6">{error}</p>
+    <button
+      onClick={() => window.location.reload()}
+      className="px-6 py-3 rounded-full bg-saffron text-bone font-bold hover:bg-saffron-deep transition-colors"
+    >
+      تلاش دوباره
+    </button>
+  </div>
+);
 
 export default MenuSection;

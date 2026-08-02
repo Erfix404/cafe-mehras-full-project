@@ -14,6 +14,11 @@ const productSchema = new mongoose.Schema(
       // null = specialty item (frontend shows a Sparkles badge, hides price)
       default: null,
     },
+    // قیمت قبل از تخفیف — برای نمایش خط‌خورده و درصد تخفیف
+    oldPrice: {
+      type: Number,
+      default: null,
+    },
     category: {
       type: String,
       required: true,
@@ -26,6 +31,26 @@ const productSchema = new mongoose.Schema(
       type: String,
       // empty descriptions allowed (admin form leaves it blank)
       default: "",
+    },
+    // برچسب‌ها: ['ویژه','جدید','پرفروش'] — برای فیلتر سریع
+    badges: {
+      type: [String],
+      default: [],
+    },
+    // محبوبیت — برای سورت «پرفروش‌ترین»
+    popularity: {
+      type: Number,
+      default: 0,
+    },
+    // امتیاز میانگین ۰ تا ۵ — نمایش ستاره
+    rating: {
+      type: Number,
+      default: 0,
+    },
+    stock: {
+      type: Number,
+      default: 100, // موجودی — صفر = ناموجود
+      min: 0,
     },
     sortOrder: {
       type: Number,

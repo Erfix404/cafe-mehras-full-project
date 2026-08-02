@@ -483,6 +483,29 @@ const menuData = [
   }
 ];
 
+// ── Store metadata derived deterministically from each item (no manual per-item data) ──
+// label:  "ویژه" (special), "پرفروش" (bestseller), "جدید" (new)
+// stock:  available count; 0 = sold out
+// rating: 3.0–5.0 popularity
+// createdAt: fake stable date so "جدیدترین" sort is meaningful
+function decorate(item, i) {
+  const special = item.price === null;
+  let label = null;
+  if (special) label = "ویژه";
+  // bestseller by menu *index* (not id) — works for both mock numbers and
+  // Mongo ObjectId strings from a live backend.
+  else if ([0, 2, 11, 15, 19, 29, 45].includes(i)) label = "پرفروش";
+  else if (i % 4 === 3) label = "جدید";
+
+  // sold-out: deterministic, a handful across the menu
+  const soldOut = special ? i === 10 : [7, 21, 33, 47].includes(i);
+  const stock = soldOut ? 0 : ((i * 7) % 64) + 1; // 1..64
+  const rating = (3.5 + ((i * 37) % 15) / 10).toFixed(1); // 3.5..4.9
+  const createdAt = new Date(Date.UTC(2026, 0, 1) + i * 26 * 3600e3).toISOString();
+
+  return { label, stock, soldOut, rating: Number(rating), createdAt };
+}
+
 export const api = {
   fetchMenuData: async () => {
     // Try the real backend first (Express + MongoDB on :5001)
@@ -497,15 +520,20 @@ export const api = {
       if (!res.ok) throw new Error(`API ${res.status}`);
       const data = await res.json();
       if (Array.isArray(data) && data.length > 0)
-        return data.map((p, i) => ({
-          ...p,
-          id: p.id ?? p._id ?? i + 1, // normalize _id from Mongo to id
-          image: p.image ? img(p.image) : p.image, // fix absolute /images/ paths for Pages
-        }));
+        return data
+          .map((p, i) => ({
+            ...p,
+            id: p.id ?? p._id ?? i + 1, // normalize _id from Mongo to id
+            image: p.image ? img(p.image) : p.image, // fix absolute /images/ paths for Pages
+            ...decorate(p, i),
+          }))
+          .sort((a, b) => a.sortOrder - b.sortOrder);
       throw new Error("empty");
     } catch (err) {
-      console.warn("⚠️ backend unavailable, using mock data:", err.message);
-      return menuData.map((p) => ({ ...p, image: img(p.image) }));
+      console.warn("⚠️ API unavailable, using mock data:", err.message);
+      return menuData
+        .map((p, i) => ({ ...p, image: img(p.image), ...decorate(p, i) }))
+        .sort((a, b) => a.sortOrder - b.sortOrder);
     }
   },
   fetchContactInfo: () =>
